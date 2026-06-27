@@ -1,0 +1,150 @@
+/* ============================================================
+   لوحة التحكم الإدارية — ثيم داكن احترافي
+   ============================================================ */
+:root{
+  --a-bg:#0f1a20;
+  --a-surface:#15242b;
+  --a-surface-2:#1c3038;
+  --a-line:#28414b;
+  --a-text:#e3e8e4;
+  --a-muted:#8fa19a;
+  --a-brass:#C29A3E;
+  --a-brass-soft:#e7d6a8;
+  --a-palm:#3ea75c;
+  --a-clay:#d65f44;
+  --a-wa:#25d366;
+  --a-radius:10px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;
+  background:var(--a-bg);color:var(--a-text);line-height:1.7;
+  -webkit-font-smoothing:antialiased;min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--a-brass);outline-offset:2px}
+
+/* ===== شاشة الدخول ===== */
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:1.5rem}
+.login-card{background:var(--a-surface);border:1px solid var(--a-line);border-top:2px solid var(--a-brass);border-radius:var(--a-radius);padding:2.4rem;width:min(400px,100%);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.login-logo{width:60px;height:60px;border-radius:var(--a-radius);margin:0 auto 1.2rem;display:block;object-fit:contain}
+.login-card h1{text-align:center;font-size:1.4rem;margin-bottom:.3rem}
+.login-card p{text-align:center;color:var(--a-muted);font-size:.85rem;margin-bottom:1.5rem}
+.login-card label{display:block;font-weight:600;margin-bottom:.4rem;font-size:.9rem}
+.login-card input{width:100%;padding:.75rem .9rem;background:var(--a-bg);border:1px solid var(--a-line);border-radius:8px;color:var(--a-text);font-family:inherit;font-size:.95rem;margin-bottom:.6rem}
+.login-card input:focus{outline:none;border-color:var(--a-brass)}
+.login-hint{font-size:.75rem;color:var(--a-muted);text-align:center;margin-top:.8rem}
+.login-error{color:var(--a-clay);font-size:.8rem;margin-bottom:.6rem;min-height:1em}
+.link-reset{display:block;width:100%;margin-top:.6rem;background:none;border:0;color:var(--a-brass);font-family:inherit;font-size:.78rem;cursor:pointer;text-align:center;text-decoration:underline;padding:.3rem}
+.link-reset:hover{color:var(--a-brass-soft)}
+.login-info{font-size:.78rem;color:var(--a-palm);text-align:center;margin-top:.6rem;min-height:1em}
+
+/* ===== التخطيط ===== */
+.admin-layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+.sidebar{background:var(--a-surface);border-inline-end:1px solid var(--a-line);padding:1.2rem 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-brand{display:flex;align-items:center;gap:.6rem;padding:0 1.2rem 1.2rem;border-bottom:1px solid var(--a-line)}
+.sidebar-brand img{width:38px;height:38px;border-radius:6px;object-fit:contain}
+.sidebar-brand strong{font-size:.95rem}
+.sidebar-brand small{display:block;color:var(--a-muted);font-size:.7rem}
+.nav-item{display:flex;align-items:center;gap:.7rem;padding:.75rem 1.2rem;color:var(--a-muted);font-weight:500;font-size:.92rem;cursor:pointer;border-inline-start:3px solid transparent;transition:.2s}
+.nav-item:hover{background:var(--a-surface-2);color:var(--a-text)}
+.nav-item.active{color:var(--a-brass);background:var(--a-surface-2);border-inline-start-color:var(--a-brass)}
+.nav-item i{width:18px;text-align:center}
+.sidebar-foot{padding:1rem 1.2rem;margin-top:auto;border-top:1px solid var(--a-line);font-size:.78rem;color:var(--a-muted)}
+
+.main-area{padding:1.8rem;overflow-x:hidden}
+.topbar-a{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.6rem;flex-wrap:wrap;gap:1rem}
+.topbar-a h2{font-size:1.4rem}
+.topbar-a .user-chip{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--a-muted)}
+.topbar-a .btn-logout{background:transparent;border:1px solid var(--a-line);color:var(--a-muted);padding:.5rem .9rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.82rem}
+.topbar-a .btn-logout:hover{border-color:var(--a-clay);color:var(--a-clay)}
+
+/* ===== البطاقات الإحصائية ===== */
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.8rem}
+.stat-card{background:var(--a-surface);border:1px solid var(--a-line);border-radius:var(--a-radius);padding:1.2rem}
+.stat-card .sc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.stat-card .sc-icon{width:36px;height:36px;border-radius:8px;display:grid;place-items:center;background:var(--a-surface-2);color:var(--a-brass)}
+.stat-card .sc-val{font-size:1.8rem;font-weight:700;font-variant-numeric:tabular-nums}
+.stat-card .sc-label{color:var(--a-muted);font-size:.82rem}
+.stat-card .sc-trend{font-size:.72rem;color:var(--a-palm)}
+
+/* ===== الرسوم (CSS) ===== */
+.chart-card{background:var(--a-surface);border:1px solid var(--a-line);border-radius:var(--a-radius);padding:1.4rem;margin-bottom:1.6rem}
+.chart-card h3{font-size:1.05rem;margin-bottom:1rem}
+.bar-chart{display:flex;align-items:flex-end;gap:.6rem;height:160px;padding-top:1rem;border-bottom:1px solid var(--a-line)}
+.bar{flex:1;background:linear-gradient(180deg,var(--a-brass),var(--a-surface-2));border-radius:6px 6px 0 0;position:relative;min-height:4px;transition:height .6s cubic-bezier(.22,.61,.36,1)}
+.bar span{position:absolute;bottom:-1.4rem;left:0;right:0;text-align:center;font-size:.7rem;color:var(--a-muted)}
+.bar em{position:absolute;top:-1.3rem;left:0;right:0;text-align:center;font-size:.72rem;font-style:normal;color:var(--a-text)}
+.chart-x{display:flex;gap:.6rem;margin-top:1.6rem}
+.chart-x span{flex:1;text-align:center;font-size:.72rem;color:var(--a-muted)}
+
+/* ===== الجداول ===== */
+.panel{background:var(--a-surface);border:1px solid var(--a-line);border-radius:var(--a-radius);padding:1.4rem;margin-bottom:1.6rem}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.8rem}
+.panel-head h3{font-size:1.05rem}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:start;padding:.7rem .8rem;border-bottom:2px solid var(--a-line);color:var(--a-muted);font-size:.8rem;font-weight:600}
+.tbl td{padding:.7rem .8rem;border-bottom:1px solid var(--a-line);font-size:.85rem}
+.tbl tr:hover td{background:var(--a-surface-2)}
+.tag{display:inline-block;padding:.15rem .55rem;border-radius:50px;font-size:.72rem;font-weight:600}
+.tag.new{background:#1f3a2a;color:var(--a-palm)}
+.tag.confirmed{background:#2a3a1f;color:var(--a-wa)}
+.tag.cancelled{background:#3a241f;color:var(--a-clay)}
+.tbl .row-actions{display:flex;gap:.4rem}
+.icon-btn{background:transparent;border:1px solid var(--a-line);color:var(--a-muted);width:30px;height:30px;border-radius:6px;cursor:pointer;display:grid;place-items:center;font-size:.8rem}
+.icon-btn:hover{border-color:var(--a-brass);color:var(--a-brass)}
+.icon-btn.del:hover{border-color:var(--a-clay);color:var(--a-clay)}
+.tbl-empty{text-align:center;padding:2rem;color:var(--a-muted);font-size:.88rem}
+
+/* ===== الحقول والأزرار ===== */
+.a-field{margin-bottom:1rem}
+.a-field label{display:block;font-weight:600;margin-bottom:.35rem;font-size:.88rem}
+.a-field input,.a-field select,.a-field textarea{width:100%;padding:.65rem .8rem;background:var(--a-bg);border:1px solid var(--a-line);border-radius:8px;color:var(--a-text);font-family:inherit;font-size:.9rem}
+.a-field input:focus,.a-field select:focus,.a-field textarea:focus{outline:none;border-color:var(--a-brass)}
+.a-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.a-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--a-brass);color:var(--a-bg);border:0;padding:.6rem 1.1rem;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.88rem;transition:.2s}
+.a-btn:hover{background:var(--a-brass-soft)}
+.a-btn.ghost{background:transparent;color:var(--a-text);border:1px solid var(--a-line)}
+.a-btn.ghost:hover{border-color:var(--a-brass);color:var(--a-brass)}
+.a-btn.danger{background:transparent;color:var(--a-clay);border:1px solid var(--a-clay)}
+.a-btn.danger:hover{background:var(--a-clay);color:#fff}
+.a-btn.wa{background:var(--a-wa);color:#053b1f}
+
+.search-box{position:relative}
+.search-box input{background:var(--a-bg);border:1px solid var(--a-line);border-radius:8px;color:var(--a-text);padding:.55rem 2.2rem .55rem .8rem;font-family:inherit;font-size:.88rem;width:240px;max-width:100%}
+.search-box i{position:absolute;inset-inline-end:.7rem;top:50%;transform:translateY(-50%);color:var(--a-muted)}
+
+/* ===== تقويم الإدارة ===== */
+.admin-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem;text-align:center}
+.admin-cal .dow{font-size:.7rem;color:var(--a-muted);font-weight:600;padding:.3rem}
+.admin-cal .day{aspect-ratio:1;display:grid;place-items:center;border-radius:6px;cursor:pointer;font-size:.85rem;border:1px solid var(--a-line);background:var(--a-bg);transition:.15s}
+.admin-cal .day:hover{border-color:var(--a-brass)}
+.admin-cal .day.past{opacity:.4;cursor:not-allowed}
+.admin-cal .day.empty{visibility:hidden}
+.admin-cal .day.booked{background:#3a241f;color:var(--a-clay);border-color:var(--a-clay)}
+.admin-cal .day.today{box-shadow:inset 0 0 0 2px var(--a-brass)}
+.cal-unit-tabs{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.cal-tab{padding:.4rem .9rem;border-radius:50px;border:1px solid var(--a-line);background:var(--a-bg);color:var(--a-muted);cursor:pointer;font-size:.82rem;font-family:inherit}
+.cal-tab.active{background:var(--a-brass);color:var(--a-bg);border-color:var(--a-brass)}
+
+/* ===== التبويبات ===== */
+.a-tabbar{display:flex;gap:.4rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.section{display:none}
+.section.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ===== toast ===== */
+.a-toast{position:fixed;bottom:1.4rem;inset-inline-end:1.4rem;z-index:200;background:var(--a-surface);border:1px solid var(--a-line);border-inline-start:4px solid var(--a-palm);color:var(--a-text);padding:.8rem 1.1rem;border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.4);font-size:.88rem;animation:aToast .3s ease}
+.a-toast.err{border-inline-start-color:var(--a-clay)}
+@keyframes aToast{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+
+@media(max-width:768px){
+  .admin-layout{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;display:flex;overflow-x:auto;padding:1rem}
+  .sidebar-brand{border:0;padding:0 .8rem 0 0;margin-inline-end:1rem}
+  .sidebar-foot{display:none}
+  .nav-item{white-space:nowrap;border:0;border-radius:8px;padding:.5rem .9rem}
+  .a-row{grid-template-columns:1fr}
+  .search-box input{width:100%}
+}

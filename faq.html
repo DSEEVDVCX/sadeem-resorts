@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الأسئلة الشائعة | منتجعات ماربيلا</title>
+  <meta name="description" content="إجابات على أكثر الأسئلة شيوعاً حول حجز استراحات ماربيلا: الحجز، الإلغاء، المرافق، الأسعار، والقوانين." />
+  <meta name="theme-color" content="#15242B" />
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script>(function(){try{var t=localStorage.getItem('marbella_theme');if(t==='dark')document.documentElement.classList.add('theme-dark');}catch(e){}})();</script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#faq-section">تخطّى إلى المحتوى</a>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span class="topbar-area"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <span id="areaName"></span></span>
+      <div class="social">
+        <a id="link-instagram" href="#" target="_blank" rel="noopener" aria-label="انستغرام"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+        <a id="link-tiktok" href="#" target="_blank" rel="noopener" aria-label="تيك توك"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+        <a id="link-whatsapp" href="#" target="_blank" rel="noopener" aria-label="واتساب"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <header class="navbar" id="navbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="index.html" aria-label="منتجعات ماربيلا - الرئيسية">
+        <img src="assets/images/logo.png" alt="شعار منتجعات ماربيلا" class="logo" width="52" height="52" />
+        <span class="brand-text"><h1 id="brandName"></h1><small>استراحات ومجالس للإيجار اليومي</small></span>
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="التنقل الرئيسي">
+        <a href="index.html#units-section">الاستراحات</a>
+        <a href="faq.html">الأسئلة الشائعة</a>
+        <a href="cancellation-policy.html">سياسة الإلغاء</a>
+        <a href="index.html#map-section">الموقع</a>
+      </nav>
+      <a id="cta-whatsapp" class="btn btn-wa" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> احجز الآن</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="تبديل الوضع الداكن" title="الوضع الداكن"><i class="fa-solid fa-moon"></i></button>
+      <button class="nav-toggle" id="nav-toggle" aria-label="القائمة" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+    </div>
+  </header>
+
+  <section class="hero" style="padding:3.5rem 0">
+    <div class="hero-img" role="presentation"></div>
+    <div class="hero-overlay" role="presentation"></div>
+    <div class="hero-lattice" role="presentation"></div>
+    <div class="container hero-inner">
+      <span class="hero-eyebrow">مركز المساعدة</span>
+      <h2 class="hero-title">الأسئلة <em>الشائعة</em></h2>
+      <p class="hero-sub">إجابات سريعة على أكثر ما يُسأل عنه قبل حجز استراحتك معنا.</p>
+    </div>
+  </section>
+
+  <main class="container" id="faq-section" style="padding:2rem 0 3rem">
+    <div class="faq-search reveal" style="margin-bottom:1.6rem">
+      <div class="field">
+        <label for="faq-search-input"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> ابحث في الأسئلة</label>
+        <input id="faq-search-input" type="search" placeholder="اكتب كلمة البحث..." autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="faq-list" id="faq-list"></div>
+
+    <p class="faq-empty" id="faq-empty" hidden>لا توجد نتائج مطابقة لبحثك.</p>
+
+    <div class="faq-contact reveal" style="text-align:center;margin-top:2.5rem">
+      <p>لم تجد إجابتك؟ تواصل معنا مباشرة</p>
+      <a id="faq-wa" class="btn btn-wa" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> تواصل عبر واتساب</a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <h3 id="footerBrand"></h3>
+        <p>للحجز والاستفسار: <span id="footerPhone"></span></p>
+      </div>
+      <div class="footer-social">
+        <a id="footer-instagram" href="#" target="_blank" rel="noopener" aria-label="انستغرام"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+        <a id="footer-tiktok" href="#" target="_blank" rel="noopener" aria-label="تيك توك"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
+        <a id="footer-whatsapp" href="#" target="_blank" rel="noopener" aria-label="واتساب"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <p class="copyright">© <span id="year"></span> منتجعات ماربيلا — جميع الحقوق محفوظة</p>
+  </footer>
+
+  <a id="float-whatsapp" class="float-wa" href="#" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+
+  <script src="js/data.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    // ربط الإعدادات + بناء FAQ ديناميكياً من data.js + البحث الفوري
+    initShell();
+    const $ = id=>document.getElementById(id);
+    const fw=$("faq-wa"); if(fw) fw.href = `https://wa.me/${SETTINGS.whatsapp}`;
+
+    // أيقونات لكل تصنيف FAQ
+    const CAT_ICONS = {
+      "الحجز والإلغاء":"fa-calendar-check",
+      "الأسعار والدفع":"fa-money-bill-wave",
+      "المرافق والخدمات":"fa-house",
+      "القوانين":"fa-scale-balanced"
+    };
+
+    // بناء الأسئلة من مصفوفة FAQ
+    function renderFAQ(){
+      const list = $("faq-list");
+      const cats = [];
+      (typeof FAQ!=="undefined"?FAQ:[]).forEach(item=>{
+        if(!cats.includes(item.cat)) cats.push(item.cat);
+      });
+      list.innerHTML = cats.map((cat,i)=>{
+        const items = (typeof FAQ!=="undefined"?FAQ:[]).filter(f=>f.cat===cat)
+          .map(f=>`<details class="faq-item"><summary>${f.q}</summary><p>${f.a}</p></details>`).join("");
+        return `<div class="faq-group reveal" ${i?`data-delay="${i}"`:""}>
+          <h3 class="faq-cat"><i class="fa-solid ${CAT_ICONS[cat]||"fa-circle-question"}" aria-hidden="true"></i> ${cat}</h3>
+          ${items}</div>`;
+      }).join("");
+      // إعادة تهيئة كشف الظهور للعناصر الجديدة
+      if("IntersectionObserver" in window){
+        const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}}),{threshold:.15,rootMargin:"0px 0px -40px 0px"});
+        list.querySelectorAll(".reveal").forEach(e=>io.observe(e));
+      } else list.querySelectorAll(".reveal").forEach(e=>e.classList.add("in"));
+    }
+    renderFAQ();
+
+    const input = $("faq-search-input");
+    const empty = $("faq-empty");
+    input.addEventListener("input",()=>{
+      const q = input.value.trim().toLowerCase();
+      let anyVisible = false;
+      document.querySelectorAll(".faq-item").forEach(item=>{
+        const match = !q || item.textContent.toLowerCase().includes(q);
+        item.style.display = match ? "" : "none";
+        if(match) anyVisible = true;
+      });
+      document.querySelectorAll(".faq-group").forEach(g=>{
+        g.style.display = [...g.querySelectorAll(".faq-item")].some(i=>i.style.display!=="none") ? "" : "none";
+      });
+      empty.hidden = anyVisible;
+    });
+  </script>
+</body>
+</html>
