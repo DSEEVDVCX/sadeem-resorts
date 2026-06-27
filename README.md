@@ -1,71 +1,56 @@
-# منتجعات ماربيلا — نظام الحجز الإلكتروني
+# Marbella Resorts — Electronic Booking System
 
-نظام حجز بسيط بالعربية لعدد من الاستراحات. صفحة واحدة (رابط واحد) تعمل على الجوال والحاسب.
+A single-page, responsive booking system designed for multiple resorts/chalets. It works seamlessly on both mobile devices and desktops.
 
-## المميزات
-- صور لكل استراحة (معرض صور)
-- موقع كل استراحة على خرائط جوجل
-- تقويم يعرض التواريخ المتاحة والمحجوزة
-- اختيار الاستراحة والتاريخ وإرسال الطلب مباشرة عبر واتساب
-- روابط انستغرام وتيك توك وواتساب
-- تصميم عربي RTL متجاوب
+## Features
+- Image gallery for each resort
+- Google Maps location integration
+- Interactive calendar displaying available and booked dates
+- Direct booking requests via WhatsApp (select resort, date, and send)
+- Social media integration (Instagram, TikTok, WhatsApp)
+- Fully responsive RTL (Right-to-Left) Arabic design
+- **New:** Advanced UI with animations, PWA support, and an Admin Dashboard using localStorage.
 
-## بنية المشروع
+## Project Structure
+```text
+index.html                  ← Main Landing Page (Hero, Units, Map)
+unit-details.html           ← Unit specific details page
+faq.html                    ← Frequently Asked Questions
+cancellation-policy.html    ← Cancellation Policy rules
+admin.html                  ← Admin Dashboard (Secured with password)
+manifest.json               ← PWA Manifest
+sw.js                       ← Service Worker for offline support
+css/
+  ├── style.css             ← Main stylesheet
+  └── admin.css             ← Admin Dashboard styles
+js/
+  ├── data.js               ← Data & Settings (Reads from localStorage)
+  ├── app.js                ← Main Logic (Calendar, WhatsApp, UI)
+  ├── admin.js              ← Admin Dashboard Logic (CRUD)
+  └── shared.js             ← Shared utilities across files
+assets/images/              ← Resort images and logos
 ```
-index.html        ← الصفحة الرئيسية (افتحها بالمتصفح)
-css/style.css     ← التصميم
-js/data.js        ← البيانات والإعدادات (عدّل من هنا)
-js/app.js         ← منطق التقويم والواتساب والخرائط
-assets/images/    ← صور الاستراحات
-```
 
-## التشغيل المحلي
-افتح ملف `index.html` مباشرة في المتصفح، أو شغّل خادماً بسيطاً:
+## Local Setup
+To run the project locally, simply open `index.html` in your browser, or start a simple local server:
 ```powershell
 python -m http.server 8000
 ```
-ثم افتح: http://localhost:8000
+Then visit: `http://localhost:8000`
 
-## التعديل السريع (بدون برمجة)
-افتح `js/data.js` وعدّل:
-- `whatsapp` و `phoneDisplay`: رقم الواتساب
-- `instagram` و `tiktok`: روابط التواصل
-- `brandName`: اسم العلامة التجارية
-- مصفوفة `UNITS`: أسماء الاستراحات، الأسعار، الوصف، المميزات، الإحداثيات (lat/lng)
+## Live Deployment
+The project is hosted via **GitHub Pages**.
+Live Website: [https://dseevdvcx.github.io/marbella-resorts/](https://dseevdvcx.github.io/marbella-resorts/)
 
-## تحديث التواريخ المحجوزة
-عند تأكيد حجز عبر واتساب، افتح `js/data.js` وأضف التاريخ داخل قائمة `booked` للاستراحة المعنية:
-```js
-booked: ["2026-07-05", "2026-07-12"]
-```
-ثم ارفع التحديث للموقع (انظر النشر).
+## Customization (No coding required)
+To modify settings quickly:
+- Open `js/data.js` to change WhatsApp numbers, brand name, social media links, and the default `UNITS` array (resort details, prices, features).
+- To update the logo, replace `assets/images/logo.png` with your new logo image.
 
-> ملاحظة: هذا نظام ثابت بدون قاعدة بيانات. التواريخ المحجوزة تُحدّث يدوياً.
-> إذا أردت حجزاً تلقائياً ومشاركاً بين كل العملاء، يمكن ربطه لاحقاً بـ Firebase أو Google Sheets.
+## Admin Dashboard
+Access the `admin.html` page to manage your resorts directly from the browser.
+- **Login:** The dashboard is protected by a password.
+- **Features:** Update booked dates, change prices, edit resort descriptions, and manage social links.
+- **Storage:** Data is saved locally in your browser using `localStorage`.
 
-## النشر على رابط واحد مجاني (Netlify)
-1. ادخل https://app.netlify.com وسجّل مجاناً
-2. اضغط "Add new site" → "Deploy manually"
-3. اسحب مجلد المشروع كاملاً إلى صندوق الرفع
-4. ستحصل على رابط فوري (مثال: https://marbella-resorts.netlify.app)
-5. لتغيير الرابط: Site settings → Change site name
-
-## النشر عبر Vercel (بديل)
-1. ادخل https://vercel.com وسجّل
-2. "Add New Project" → ارفع المشروع من GitHub أو اسحب المجلد
-3. اضغط Deploy
-
-## إضافة شعار (لوغو) حقيقي
-ضع ملف الشعار في `assets/images/logo.png` ثم عدّل في `index.html` العنصر ذو الكلاس `logo`
-ليصبح صورة:
-```html
-<img src="assets/images/logo.png" alt="ماربيلا" class="logo" />
-```
-
-## استبدال الصور
-ضع صورك في `assets/images/` بنفس الأسماء، أو عدّل المسارات في `js/data.js` ضمن `images`.
-
-## روابط التواصل الحالية
-- واتساب: +971 56 622 2566
-- انستغرام: https://www.instagram.com/resortmarbella
-- تيك توك: يُضاف في `js/data.js` ضمن `tiktok`
+*Note: Since this relies on `localStorage`, your admin changes will only apply to the specific browser/device you are using. For cross-device syncing, a backend database (like Firebase or Supabase) would be required.*
