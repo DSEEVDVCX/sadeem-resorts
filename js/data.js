@@ -153,7 +153,7 @@ const KEYS = {
   favorites: "sadeem_favorites",
   reviews:   "sadeem_reviews"
 };
-const SCHEMA_VERSION = 4; // bump عند تغيير بنية البيانات لإعادة زرع الافتراضي
+const SCHEMA_VERSION = 5; // bump عند تغيير بنية البيانات لإعادة زرع الافتراضي
 
 const DEFAULT_SETTINGS = Object.assign({}, SETTINGS);
 const DEFAULT_UNITS    = JSON.parse(JSON.stringify(UNITS));
