@@ -1,14 +1,15 @@
 /* ============================================================
-   Service Worker — منتجعات سديم
+   Service Worker — منتجعات ماربيلا
    Cache-first للصفحات والأصول، أوفلاين مع رسالة تحديث
    ============================================================ */
-const CACHE = "sadeem-v4";
+const CACHE = "marbella-v1";
 const ASSETS = [
   "./",
   "./index.html",
   "./faq.html",
   "./cancellation-policy.html",
   "./unit-details.html",
+  "./unit.html",
   "./admin.html",
   "./css/style.css",
   "./css/admin.css",
