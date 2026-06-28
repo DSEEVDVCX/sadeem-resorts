@@ -7,9 +7,22 @@ const firebaseConfig = {
   appId: "1:891120028271:web:11b584600bf2c260705b9a"
 };
 
+// بريد الأدمن المستخدم لتسجيل الدخول عبر Firebase Authentication.
+// أنشئ مستخدماً بهذا البريد وكلمة مرور من Firebase Console ← Authentication ← Users.
+// يمكنك تغييره هنا إلى أي بريد تملكه (يُستخدم أيضاً لاستعادة كلمة المرور).
+// يُصدَّر على window ليقرأه admin.js (مصدر وحيد للحقيقة).
+const ADMIN_EMAIL = "admin@marbella-resorts.com";
+window.ADMIN_EMAIL = ADMIN_EMAIL;
+
 // Initialize Firebase using compat libraries (loaded via CDN)
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
-const db = firebase.firestore();
-const auth = firebase.auth();
+window.db = firebase.firestore();
+window.auth = firebase.auth();
+
+// تفعيل التخزين المؤقت المحلي (offline persistence) لتفادي إعادة جلب الإعدادات/الاستراحات
+// مع كل تنقّل بين الصفحات، وتحسين الأداء. يُتجاهل بهدوء في المتصفحات غير الداعمة (متعدد التبويبات).
+try {
+  db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+} catch (e) { /* متصفح غير داعم */ }
