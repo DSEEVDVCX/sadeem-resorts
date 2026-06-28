@@ -660,10 +660,12 @@ function init(){
     setTimeout(()=>openBooking(bookId), 400);
   }
 
-  // تسجيل Service Worker (PWA)
+  // إزالة Service Worker لتفادي مشاكل الكاش القديمة
   if("serviceWorker" in navigator){
-    window.addEventListener("load",()=>{
-      navigator.serviceWorker.register("sw.js").catch(()=>{});
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      for(let registration of registrations) {
+        registration.unregister();
+      }
     });
   }
 
