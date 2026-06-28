@@ -631,8 +631,8 @@ section[id],main[id]{scroll-margin-top:90px}
 /* Likes Badge */
 .likes-badge {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
+  top: 0.7rem;
+  inset-inline-start: 0.7rem;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   border-radius: 2rem;
@@ -658,8 +658,6 @@ section[id],main[id]{scroll-margin-top:90px}
   font-weight: 600;
 }
 html[dir="ltr"] .likes-badge {
-  left: auto;
-  right: 1rem;
   padding: 0.2rem 0.2rem 0.2rem 0.6rem;
 }
 
