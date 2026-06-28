@@ -140,9 +140,7 @@ function renderUnits(filterFn){
         <div class="gallery-dots">${dots}</div>
       </div>
       <div class="unit-body">
-        <button class="btn-share" onclick="shareUnit(${u.id})">
-          <i class="fa-solid fa-arrow-up-from-bracket"></i> <span data-tr="share-link">${typeof tr !== 'undefined' ? tr('share-link') : 'نسخ الرابط'}</span>
-        </button>
+        
         <h3>${name}</h3>
         <p class="unit-tag">${tagline}</p>
         
@@ -238,9 +236,7 @@ function renderFavorites(){
         <button class="fav-btn on" data-fav="${u.id}" aria-label="إزالة من المفضّلة" aria-pressed="true"><i class="fa-solid fa-heart"></i></button>
       </div>
       <div class="unit-body">
-        <button class="btn-share" onclick="shareUnit(${u.id})">
-          <i class="fa-solid fa-arrow-up-from-bracket"></i> <span data-tr="share-link">${typeof tr !== 'undefined' ? tr('share-link') : 'نسخ الرابط'}</span>
-        </button>
+        
         <h3>${u.name}</h3>
         <p class="unit-tag">${u.tagline}</p>
         <div class="unit-features">${features}</div>
