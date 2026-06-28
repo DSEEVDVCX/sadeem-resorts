@@ -21,7 +21,8 @@ function toast(msg,isErr){
 /* ===== المصادقة عبر Firebase Auth =====
    الأدمن مستخدم Email/Password في Firebase Authentication.
    الجلسة تُدار تلقائياً بواسطة Firebase (بدون sessionStorage). */
-const ADMIN_EMAIL = window.ADMIN_EMAIL;
+// ADMIN_EMAIL مُعرَّف مسبقاً في firebase-config.js — نستخدمه مباشرة عبر window
+const _ADMIN_EMAIL = window.ADMIN_EMAIL;
 
 document.getElementById("login-form").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -30,7 +31,7 @@ document.getElementById("login-form").addEventListener("submit",async e=>{
   const info=document.getElementById("login-info");
   err.textContent=""; info.textContent="";
   try{
-    await auth.signInWithEmailAndPassword(ADMIN_EMAIL, pass);
+    await auth.signInWithEmailAndPassword(_ADMIN_EMAIL, pass);
     // onAuthStateChanged سيتولّى عرض اللوحة
   }catch(ex){
     const code = ex && ex.code ? ex.code : "";
@@ -48,7 +49,7 @@ document.getElementById("reset-pass-link").addEventListener("click",async ()=>{
   const err=document.getElementById("login-error");
   err.textContent=""; info.textContent="";
   try{
-    await auth.sendPasswordResetEmail(ADMIN_EMAIL);
+    await auth.sendPasswordResetEmail(_ADMIN_EMAIL);
     info.textContent="تم إرسال رابط استعادة كلمة المرور إلى بريد الأدمن.";
   }catch(ex){
     err.textContent="تعذّر إرسال رابط الاستعادة. تأكد من تفعيل Email/Password في Firebase.";
@@ -61,7 +62,7 @@ document.getElementById("logout-btn").addEventListener("click",async ()=>{
 
 // بوابة العرض حسب حالة المصادقة
 auth.onAuthStateChanged(async (user) => {
-  if(user && user.email === ADMIN_EMAIL){
+  if(user && user.email === _ADMIN_EMAIL){
     await store.initData();     // تحميل الإعدادات والاستراحات من Firestore
     cachedBookings = await store.getBookings();
     if(_bookingsUnsub){ _bookingsUnsub(); _bookingsUnsub = null; }
