@@ -566,9 +566,11 @@ section[id],main[id]{scroll-margin-top:90px}
 
 /* Language Toggle */
 .lang-toggle {
-  background: none;
-  border: 1px solid var(--accent);
-  color: var(--accent);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--brass);
+  color: var(--brass);
   padding: 0.2rem 0.6rem;
   border-radius: 4px;
   font-family: inherit;
@@ -579,8 +581,8 @@ section[id],main[id]{scroll-margin-top:90px}
   margin: 0 0.5rem;
 }
 .lang-toggle:hover {
-  background: var(--accent);
-  color: var(--surface);
+  background: var(--brass);
+  color: var(--sand);
 }
 
 /* Section Switcher */
@@ -591,8 +593,8 @@ section[id],main[id]{scroll-margin-top:90px}
   margin-bottom: 2rem;
 }
 .sec-btn {
-  background: var(--surface-hover);
-  color: var(--text);
+  background: var(--line);
+  color: var(--ink);
   border: none;
   padding: 0.6rem 1.5rem;
   border-radius: 2rem;
@@ -602,8 +604,8 @@ section[id],main[id]{scroll-margin-top:90px}
   transition: all var(--trans-fast);
 }
 .sec-btn.active, .sec-btn:hover {
-  background: var(--accent);
-  color: var(--surface);
+  background: var(--brass);
+  color: var(--sand);
 }
 
 /* Numeric Amenities Badges */
@@ -615,7 +617,7 @@ section[id],main[id]{scroll-margin-top:90px}
 }
 .amenity-badge {
   background: rgba(212, 175, 55, 0.1);
-  color: var(--accent);
+  color: var(--brass);
   border: 1px solid rgba(212, 175, 55, 0.3);
   padding: 0.3rem 0.6rem;
   border-radius: 6px;
