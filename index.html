@@ -128,8 +128,8 @@
   <main class="container" id="units-section">
     <div class="section-head reveal">
       <span class="eyebrow">اختر استراحتك</span>
-      <h2>ثلاث استراحات، <span class="gradient-text">تجربة واحدة</span></h2>
-      <p>كل استراحة مستقلة بمسبحها ومجلسها. اختر التاريخ من التقويم ثم أرسل طلبك مباشرة عبر واتساب.</p>
+      <h2 data-tr="exp-title">ثلاث استراحات، <span class="gradient-text">تجربة واحدة</span></h2>
+      <p data-tr="exp-sub">كل استراحة مستقلة بمسبحها ومجلسها. اختر التاريخ من التقويم ثم أرسل طلبك مباشرة عبر واتساب.</p>
       <button id="fav-toggle" class="fav-toggle" aria-expanded="false" aria-controls="fav-section">
         <i class="fa-solid fa-heart" aria-hidden="true"></i> <span data-tr="fav-title">مفضّلتي</span>
         <span id="fav-count" class="fav-badge" hidden>0</span>
@@ -171,10 +171,10 @@
 
     <!-- شريط الإحصائيات -->
     <div class="stats-band reveal">
-      <div class="stat"><strong data-counter="3">0</strong><span>استراحات فاخرة</span></div>
-      <div class="stat"><strong data-counter="500" data-suffix="+">0</strong><span>ضيف سعيد</span></div>
-      <div class="stat"><strong data-counter="24" data-suffix="/7">0</strong><span>خدمة عملاء</span></div>
-      <div class="stat"><strong data-counter="100" data-suffix="%">0</strong><span>خصوصية تامة</span></div>
+      <div class="stat"><strong data-counter="3">0</strong><span data-tr="stat-resorts">استراحات فاخرة</span></div>
+      <div class="stat"><strong data-counter="500" data-suffix="+">0</strong><span data-tr="stat-guests">ضيف سعيد</span></div>
+      <div class="stat"><strong data-counter="24" data-suffix="/7">0</strong><span data-tr="stat-service">خدمة عملاء</span></div>
+      <div class="stat"><strong data-counter="100" data-suffix="%">0</strong><span data-tr="stat-privacy">خصوصية تامة</span></div>
     </div>
 
     <div id="units-grid" class="units-grid"></div>
@@ -183,22 +183,22 @@
   <!-- ===== لماذا سديم ===== -->
   <section class="container" id="why-section" style="margin-bottom:3rem">
     <div class="section-head reveal">
-      <span class="eyebrow">لماذا سديم</span>
-      <h2>تجربة تستحقها</h2>
+      <span class="eyebrow" data-tr="why-eye">لماذا سديم</span>
+      <h2 data-tr="why-title">تجربة تستحقها</h2>
     </div>
     <div class="why-grid">
-      <div class="why-card reveal" data-delay="1"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><h3>خصوصية تامة</h3><p>استراحات مستقلة بالكامل بعيداً عن الزحام</p></div>
-      <div class="why-card reveal" data-delay="2"><i class="fa-solid fa-water" aria-hidden="true"></i><h3>مسابح خاصة</h3><p>لكل استراحة مسبحها المنفصل</p></div>
-      <div class="why-card reveal" data-delay="3"><i class="fa-solid fa-mug-hot" aria-hidden="true"></i><h3>مجالس راقية</h3><p>مجالس داخلية وخارجية بديكور فاخر</p></div>
-      <div class="why-card reveal" data-delay="4"><i class="fa-solid fa-key" aria-hidden="true"></i><h3>حجز سهل</h3><p>اختر التاريخ وأرسل طلبك عبر واتساب</p></div>
+      <div class="why-card reveal" data-delay="1"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><h3 data-tr="why-1-t">خصوصية تامة</h3><p data-tr="why-1-d">استراحات مستقلة بالكامل بعيداً عن الزحام</p></div>
+      <div class="why-card reveal" data-delay="2"><i class="fa-solid fa-water" aria-hidden="true"></i><h3 data-tr="why-2-t">مسابح خاصة</h3><p data-tr="why-2-d">لكل استراحة مسبحها المنفصل</p></div>
+      <div class="why-card reveal" data-delay="3"><i class="fa-solid fa-mug-hot" aria-hidden="true"></i><h3 data-tr="why-3-t">مجالس راقية</h3><p data-tr="why-3-d">مجالس داخلية وخارجية بديكور فاخر</p></div>
+      <div class="why-card reveal" data-delay="4"><i class="fa-solid fa-key" aria-hidden="true"></i><h3 data-tr="why-4-t">حجز سهل</h3><p data-tr="why-4-d">اختر التاريخ وأرسل طلبك عبر واتساب</p></div>
     </div>
   </section>
 
   <!-- ===== قصص النجاح / شهادات الضيوف ===== -->
   <section class="container" id="testimonials-section" style="margin-bottom:3rem">
     <div class="section-head reveal">
-      <span class="eyebrow">آراء ضيوفنا</span>
-      <h2>قصص نجاح حقيقية</h2>
+      <span class="eyebrow" data-tr="test-eye">آراء ضيوفنا</span>
+      <h2 data-tr="test-title">قصص نجاح حقيقية</h2>
     </div>
     <div id="testimonials-grid" class="testimonials-grid"></div>
   </section>
@@ -207,8 +207,8 @@
   <section class="map-section" id="map-section">
     <div class="container">
       <div class="section-head center reveal">
-        <span class="eyebrow">الموقع</span>
-        <h2>في قلب <span id="areaName2"></span></h2>
+        <span class="eyebrow" data-tr="loc-eye">الموقع</span>
+        <h2 style="display:flex; justify-content:center; gap:0.5rem;"><span data-tr="loc-title">في قلب</span> <span id="areaName2"></span></h2>
       </div>
       <div class="map-wrap">
         <iframe id="area-map" src="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="خريطة موقع الاستراحات"></iframe>

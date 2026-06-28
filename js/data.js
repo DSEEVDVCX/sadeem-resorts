@@ -12,6 +12,7 @@ const SETTINGS = {
   tiktok: "https://www.tiktok.com/@resortsadeem",
   // المنطقة العامة
   areaName: "الظاهرة / الملاليح - أبو ظبي",
+  areaNameEn: "Al Dhahirah / Al Malaleeh - Abu Dhabi",
   // رسالة ترحيب تظهر في الطلب المُرسل للواتساب
   introMessage: "مرحباً، أرغب في حجز استراحة:",
 };
@@ -107,12 +108,13 @@ const UNITS = [
    ============================================================ */
 const OFFERS = {
   target: "2026-07-15",
-  label: "عرض الصيف — خصم خاص على الحجوزات المبكرة"
+  label: "عرض الصيف — خصم خاص على الحجوزات المبكرة",
+  labelEn: "Summer Offer — Special Discount on Early Bookings"
 };
 
 const TESTIMONIALS = [
-  { name: "أبو محمد", role: "ضيف دائم", text: "استراحة نظيفة وخصوصية تامة، كرّرنا الحجز مرتين والخدمة ممتازة.", rating: 5 },
-  { name: "عائلة العتيبي", role: "ضيف", text: "المسبح خاص وكان مناسبًا للأطفال، والمجلس فاخر. تجربة عائلية ممتازة.", rating: 5 },
+  { name: "أبو محمد", nameEn: "Abu Mohammed", role: "ضيف دائم", roleEn: "Regular Guest", text: "استراحة نظيفة وخصوصية تامة، كرّرنا الحجز مرتين والخدمة ممتازة.", textEn: "Clean resort, total privacy. We booked twice, excellent service.", rating: 5 },
+  { name: "عائلة العتيبي", nameEn: "Al Otaibi Family", role: "ضيف", roleEn: "Guest", text: "المسبح خاص وكان مناسبًا للأطفال، والمجلس فاخر. تجربة عائلية ممتازة.", textEn: "Private pool was great for kids, and the lounge is luxurious. Excellent family experience.", rating: 5 },
   { name: "خالد الشمري", role: "ضيف", text: "الموقع هادئ وقريب من كل الخدمات، والتواصل عبر واتساب كان سريعًا.", rating: 4 },
 ];
 

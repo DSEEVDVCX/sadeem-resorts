@@ -81,8 +81,8 @@ function initSettings(){
   // Re-render on language change
   window.addEventListener("languageChanged", () => {
     renderUnits();
-    // Rebuild feature chips if needed
     buildFilterChips();
+    renderTestimonials();
   });
 }
 
