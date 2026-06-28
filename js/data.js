@@ -1,5 +1,5 @@
 /* ============================================================
-   بيانات منتجعات سديم — عدّل القيم هنا فقط
+   بيانات منتجعات ماربيلا — عدّل القيم هنا فقط
    ============================================================ */
 
 const SETTINGS = {
@@ -26,8 +26,8 @@ const UNITS = [
     id: "estrha1",
     section: "families",
     likes: 142,
-    name: "استراحة سديم 1 (عائلات)",
-    nameEn: "Sadeem Resort 1 (Families)",
+    name: "استراحة ماربيلا 1 (عائلات)",
+    nameEn: "Marbella Resort 1 (Families)",
     tagline: "المكان المثالي لجمعتك العائلية القادمة",
     taglineEn: "The perfect place for your next family gathering",
     price: 1500,
@@ -52,8 +52,8 @@ const UNITS = [
     id: "estrha2",
     section: "singles",
     likes: 85,
-    name: "استراحة سديم 2 (عزاب/عائلات)",
-    nameEn: "Sadeem Resort 2 (Singles/Families)",
+    name: "استراحة ماربيلا 2 (عزاب/عائلات)",
+    nameEn: "Marbella Resort 2 (Singles/Families)",
     tagline: "هدوء وفخامة مع خصوصية تامة",
     taglineEn: "Quietness and luxury with total privacy",
     price: 1200,
@@ -78,8 +78,8 @@ const UNITS = [
     id: "estrha3",
     section: "singles",
     likes: 110,
-    name: "استراحة سديم 3",
-    nameEn: "Sadeem Resort 3",
+    name: "استراحة ماربيلا 3",
+    nameEn: "Marbella Resort 3",
     tagline: "تجربة راقية بأسعار تنافسية",
     taglineEn: "An upscale experience at competitive prices",
     price: 1200,
@@ -204,8 +204,8 @@ async function sha256(text){
 }
 
 // إتاحة الدوال للوحة التحكم
-if(!window.SadeemStore){
-  window.SadeemStore = {
+if(!window.MarbellaStore){
+  window.MarbellaStore = {
     KEYS, AR_MONTHS, AR_DOW, pad, toISO, loadJSON, saveJSON, sha256,
     getSettings(){ return loadJSON(KEYS.settings, DEFAULT_SETTINGS); },
     setSettings(s){ saveJSON(KEYS.settings, s); Object.assign(SETTINGS, s); },

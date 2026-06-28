@@ -1,10 +1,10 @@
 /* ============================================================
-   لوحة تحكم منتجعات سديم — منطق كامل
+   لوحة تحكم منتجعات ماربيلا — منطق كامل
    مصادقة SHA-256 + CRUD + رسوم CSS + تصدير CSV
    ملاحظة: AR_MONTHS/AR_DOW/pad/toISO من data.js عبر store (مصدر مشترك)
    ============================================================ */
 
-const store = window.SadeemStore;
+const store = window.MarbellaStore;
 // AR_MONTHS/AR_DOW/pad/toISO مُعرّفة عامة في data.js ومتاحة مباشرة هنا
 let calUnitId = null, calDate = new Date();
 
@@ -20,7 +20,7 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;",
 /* ===== المصادقة =====
    رمز الجلسة مُشتق من كلمة المرور (أول 16 حرفاً من هاشها) لا قيمة ثابتة،
    فلا يكفي ضبط قيمة في sessionStorage لتجاوز البوابة. (حماية من جانب العميل فقط.) */
-const SESSION_KEY = "sadeem_admin_session";
+const SESSION_KEY = "marbella_admin_session";
 async function sessionToken(pass){ return (await store.sha256(pass)).slice(0,16); }
 async function login(pass){
   const hash = await store.sha256(pass);
@@ -253,7 +253,7 @@ document.getElementById("export-csv").addEventListener("click",()=>{
   const csv="\uFEFF"+rows.map(r=>r.map(c=>`"${csvSafe(c).replace(/"/g,'""')}"`).join(",")).join("\n");
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download="sadeem-bookings.csv";a.click();URL.revokeObjectURL(a.href);
+  a.download="marbella-bookings.csv";a.click();URL.revokeObjectURL(a.href);
   toast("تم تصدير الحجوزات");
 });
 
@@ -314,10 +314,10 @@ function renderAll(){
 // استئناف الجلسة إن كانت قائمة وصحيحة
 verifySession().then(ok => { if(ok){ sessionOk = true; showAdmin(); } });
 
-// Force migration from Sadeem to Marbella for existing local storage
+// Force migration from Marbella to Marbella for existing local storage
 (function(){
   const s = store.getSettings();
-  if(s.brandName === "منتجعات سديم" || s.brandName === "منتجعات سديم") {
+  if(s.brandName === "منتجعات ماربيلا" || s.brandName === "منتجعات ماربيلا") {
       s.brandName = "منتجعات ماربيلا";
       s.brandNameEn = "Marbella Resorts";
       store.setSettings(s);

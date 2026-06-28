@@ -1,5 +1,5 @@
 /* ============================================================
-   تطبيق منتجعات سديم — تقويم + خرائط + واتساب
+   تطبيق منتجعات ماربيلا — تقويم + خرائط + واتساب
    ملاحظة: AR_MONTHS/AR_DOW/pad/toISO مُعرّفة في data.js (مصدر مشترك)
    ============================================================ */
 
@@ -101,7 +101,7 @@ function clearFilters(){
 function renderUnits(filterFn){
   const grid = document.getElementById("units-grid");
   const list = filterFn ? UNITS.filter(filterFn) : getFilteredUnits();
-  const store = window.SadeemStore;
+  const store = window.MarbellaStore;
   if(!list.length){
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)"><i class="fa-solid fa-magnifying-glass-minus" style="font-size:2rem;opacity:.4;display:block;margin-bottom:.6rem"></i>لا توجد استراحات مطابقة لبحثك. <button class="fb-clear" id="fb-clear">مسح الفلاتر</button></div>`;
     const clr = document.getElementById("fb-clear");
@@ -175,7 +175,7 @@ function renderUnits(filterFn){
     btn.addEventListener("click",(e)=>{
       e.stopPropagation();
       const id = btn.dataset.fav;
-      const store = window.SadeemStore;
+      const store = window.MarbellaStore;
       store.toggleFavorite(id);
       const on = store.isFavorite(id);
       btn.classList.toggle("on", on);
@@ -206,7 +206,7 @@ function renderUnits(filterFn){
 
 /* ===== قسم المفضّلة ===== */
 function updateFavCount(){
-  const store = window.SadeemStore;
+  const store = window.MarbellaStore;
   const n = store ? store.getFavorites().length : 0;
   const badge = document.getElementById("fav-count");
   if(badge){ badge.textContent = n; badge.hidden = n===0; }
@@ -215,7 +215,7 @@ function updateFavCount(){
 function renderFavorites(){
   const grid = document.getElementById("fav-grid");
   const empty = document.getElementById("fav-empty");
-  const store = window.SadeemStore;
+  const store = window.MarbellaStore;
   if(!store){ grid.innerHTML=""; return; }
   const favIds = store.getFavorites();
   const favUnits = UNITS.filter(u=>favIds.includes(u.id));
@@ -498,9 +498,9 @@ function sendToWhatsApp(){
   const url = `https://wa.me/${SETTINGS.whatsapp}?text=${encodeURIComponent(msg)}`;
 
   // تسجيل الحجز في التخزين المحلي (تظهر في لوحة التحكم)
-  if(window.SadeemStore){
+  if(window.MarbellaStore){
     const isoDate = toISO(selectedDate);
-    window.SadeemStore.addBooking({
+    window.MarbellaStore.addBooking({
       id: "BK" + Date.now().toString(36),
       unitId: currentUnit.id,
       unitName: currentUnit.name,
@@ -511,7 +511,7 @@ function sendToWhatsApp(){
       createdAt: new Date().toISOString()
     });
     // ربط التاريخ كمحجوز لمنع الحجز المزدوج على التقويم العام
-    window.SadeemStore.markBooked(currentUnit.id, isoDate);
+    window.MarbellaStore.markBooked(currentUnit.id, isoDate);
   }
 
   // إعادة تمكين الزر بعد الفتح
