@@ -12,6 +12,8 @@ const DICT = {
     "nav-map": "الموقع",
     "hero-title": "مجالسٌ تُحيى <em>تحت سماء الصحراء</em>",
     "hero-sub": "ثلاث استراحات خاصة بمسابح ومجالس راقية في قلب الظاهرة — صُممت لخصوصيتك التامة وللّحظات جمعك العائلية بعد الغروب.",
+    "hero-meta-text": "ثلاث استراحات فاخرة",
+    "units-eye": "اختر استراحتك",
     "btn-book": "احجز الآن",
     "btn-choose": "اختر استراحتك",
     "btn-wa": "تواصل عبر واتساب",
@@ -64,6 +66,8 @@ const DICT = {
     "nav-map": "Location",
     "hero-title": "Lounges alive <em>under the desert sky</em>",
     "hero-sub": "Three private resorts with pools and elegant lounges in the heart of Al Dhahirah — designed for total privacy.",
+    "hero-meta-text": "Three Luxury Resorts",
+    "units-eye": "Choose Your Resort",
     "btn-book": "Book Now",
     "btn-choose": "Choose Resort",
     "btn-wa": "Contact via WhatsApp",
@@ -139,8 +143,16 @@ function updateLanguage(lang) {
   // Update dynamic parts like settings
   const $ = id => document.getElementById(id);
   const set = (id, val) => { const el = $(id); if(el) el.textContent = val; };
-  set("brandName", lang === "ar" ? SETTINGS.brandName : SETTINGS.brandNameEn);
-  set("footerBrand", lang === "ar" ? SETTINGS.brandName : SETTINGS.brandNameEn);
+  const brand = lang === "ar" ? SETTINGS.brandName : SETTINGS.brandNameEn;
+  const area = lang === "ar" ? SETTINGS.areaName : (SETTINGS.areaNameEn || SETTINGS.areaName);
+  
+  set("brandName", brand);
+  set("footerBrand", brand);
+  set("heroBrand", brand);
+  
+  set("areaName", area);
+  set("areaName2", area);
+  set("areaName3", area);
   
   // Trigger custom event so other scripts can re-render if needed
   window.dispatchEvent(new Event("languageChanged"));
@@ -153,9 +165,17 @@ function initShell(){
   const set = (id, val) => { const el = $(id); if(el) el.textContent = val; };
   const href = (id, url) => { const el = $(id); if(el) el.href = url; };
 
-  set("areaName", SETTINGS.areaName);
-  set("areaName2", SETTINGS.areaName);
-  set("areaName3", SETTINGS.areaName);
+  const isEn = typeof currentLang !== "undefined" && currentLang === "en";
+  const brand = isEn ? SETTINGS.brandNameEn : SETTINGS.brandName;
+  const area = isEn ? (SETTINGS.areaNameEn || SETTINGS.areaName) : SETTINGS.areaName;
+  
+  set("heroBrand", brand);
+  set("brandName", brand);
+  set("footerBrand", brand);
+  
+  set("areaName", area);
+  set("areaName2", area);
+  set("areaName3", area);
   set("footerPhone", SETTINGS.phoneDisplay);
   set("year", new Date().getFullYear());
 
