@@ -115,7 +115,7 @@ const OFFERS = {
 const TESTIMONIALS = [
   { name: "أبو محمد", nameEn: "Abu Mohammed", role: "ضيف دائم", roleEn: "Regular Guest", text: "استراحة نظيفة وخصوصية تامة، كرّرنا الحجز مرتين والخدمة ممتازة.", textEn: "Clean resort, total privacy. We booked twice, excellent service.", rating: 5 },
   { name: "عائلة العتيبي", nameEn: "Al Otaibi Family", role: "ضيف", roleEn: "Guest", text: "المسبح خاص وكان مناسبًا للأطفال، والمجلس فاخر. تجربة عائلية ممتازة.", textEn: "Private pool was great for kids, and the lounge is luxurious. Excellent family experience.", rating: 5 },
-  { name: "خالد الشمري", role: "ضيف", text: "الموقع هادئ وقريب من كل الخدمات، والتواصل عبر واتساب كان سريعًا.", rating: 4 },
+  { name: "خالد الشمري", nameEn: "Khaled Al-Shammari", role: "ضيف", roleEn: "Guest", text: "الموقع هادئ وقريب من كل الخدمات، والتواصل عبر واتساب كان سريعًا.", textEn: "Quiet location close to all services, and WhatsApp communication was fast.", rating: 4 },
 ];
 
 /* ============================================================
@@ -133,32 +133,14 @@ const FAQ = [
 ];
 
 /* ============================================================
-   ملاحظة حول التواريخ المحجوزة:
-   عند تأكيد حجز عبر واتساب، أضف التاريخ داخل قائمة "booked"
-   للإستراحة المعنية بهذا الشكل:  "2026-07-05"
-   مثال:
-   booked: ["2026-07-05", "2026-07-12"]
-
-   === طبقة التخزين (localStorage) ===
-   عند أول تشغيل تُنسخ الإعدادات والاستراحات إلى localStorage،
-   بعدها تُقرأ منه دائماً (تتيح للوحة التحكم تعديلها دون لمس الكود).
+   === طبقة التخزين: Firebase (Firestore + Auth) ===
+   كل البيانات (الإعدادات، الاستراحات، الحجوزات، التقييمات،
+   والتفضيلات: الثيم/اللغة/المفضّلة) تُخزَّن في Firebase.
+   لا يُستخدم localStorage / sessionStorage نهائياً.
    ============================================================ */
-
-const KEYS = {
-  settings:  "sadeem_settings",
-  units:     "sadeem_units",
-  bookings:  "sadeem_bookings",
-  pass:      "sadeem_admin_pass",
-  schema:    "sadeem_schema_v",
-  favorites: "sadeem_favorites",
-  reviews:   "sadeem_reviews"
-};
-const SCHEMA_VERSION = 5; // bump عند تغيير بنية البيانات لإعادة زرع الافتراضي
 
 const DEFAULT_SETTINGS = Object.assign({}, SETTINGS);
 const DEFAULT_UNITS    = JSON.parse(JSON.stringify(UNITS));
-// SHA-256 الفعلي لـ "admin123" — يُغيَّر من داخل لوحة التحكم
-const DEFAULT_PASS_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
 
 
 /* أدوات تاريخ مشتركة */
@@ -170,121 +152,191 @@ function toISO(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getD
 
 
 if(!window.MarbellaStore){
+  const _prefs = { lang:null, theme:null, favorites:[] };
+
   window.MarbellaStore = {
     AR_MONTHS, AR_DOW, pad, toISO,
-    
-    async initFirebaseData() {
-        if(!window.db) return; // If Firebase failed to load
-        try {
-            // Fetch Settings
-            const setRef = db.collection("settings").doc("main");
-            const setDoc = await setRef.get();
-            if(!setDoc.exists) {
-                await setRef.set(DEFAULT_SETTINGS);
-                Object.assign(SETTINGS, DEFAULT_SETTINGS);
-            } else {
-                Object.assign(SETTINGS, setDoc.data());
-            }
 
-            // Fetch Units
-            const unitsRef = db.collection("units");
-            const unitsSnap = await unitsRef.get();
-            if(unitsSnap.empty) {
-                // Seed units
-                for(const u of DEFAULT_UNITS) {
-                    await unitsRef.doc(u.id).set(u);
-                }
-                UNITS.splice(0, UNITS.length, ...JSON.parse(JSON.stringify(DEFAULT_UNITS)));
-            } else {
-                const fetchedUnits = [];
-                unitsSnap.forEach(doc => { fetchedUnits.push(doc.data()); });
-                // Sort by default ID or keeping same order
-                fetchedUnits.sort((a,b) => a.id.localeCompare(b.id));
-                UNITS.splice(0, UNITS.length, ...fetchedUnits);
-            }
-        } catch(e) {
-            console.error("Firebase fetch error, falling back to defaults", e);
+    /* ===== التفضيلات (الثيم/اللغة/المفضّلة) — مخزّنة في Firestore تحت users/{uid} ===== */
+    getLang(){ return _prefs.lang || "ar"; },
+    getTheme(){
+      if(_prefs.theme) return _prefs.theme;
+      try{ return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+      catch(e){ return "light"; }
+    },
+    getFavorites(){ return _prefs.favorites.slice(); },
+    isFavorite(id){ return _prefs.favorites.includes(id); },
+
+    async setLang(lang){ _prefs.lang = lang; await this._savePrefs(); },
+    toggleTheme(){
+      const dark = this.getTheme() !== "dark";
+      _prefs.theme = dark ? "dark" : "light";
+      this._applyTheme();
+      this._savePrefs();
+    },
+    toggleFavorite(id){
+      const i = _prefs.favorites.indexOf(id);
+      let add;
+      if(i>=0){ _prefs.favorites.splice(i,1); add=false; }
+      else { _prefs.favorites.push(id); add=true; }
+      this._savePrefs(); // تُحفظ المفضّلة في users/{uid} (تعمل تحت قواعد self-write)
+      // ملاحظة: عدّاد الإعجابات (units.likes) يُدار من الأدمن فقط بموجب قواعد الأمان؛
+      // لا نُصدر كتابة موعودة بالرفض من جانب الزائر المجهول.
+      return add;
+    },
+
+    _applyTheme(){
+      const dark = this.getTheme()==="dark";
+      document.documentElement.classList.toggle("theme-dark", dark);
+      const t = document.getElementById("theme-toggle");
+      if(t){ const i=t.querySelector("i"); if(i) i.className = dark?"fa-solid fa-sun":"fa-solid fa-moon"; }
+    },
+    _applyPrefs(){
+      this._applyTheme();
+      if(typeof window.updateLanguage === "function") window.updateLanguage(this.getLang());
+      window.dispatchEvent(new Event("prefsReady"));
+    },
+    async _savePrefs(){
+      try{
+        const u = window.auth && window.auth.currentUser;
+        if(!u || !window.db) return;
+        await db.collection("users").doc(u.uid).set({
+          lang: _prefs.lang, theme: _prefs.theme, favorites: _prefs.favorites,
+          updatedAt: new Date().toISOString()
+        }, { merge:true });
+      }catch(e){ /* قواعد الأمان قد تمنع؛ نتجاهل بهدوء */ }
+    },
+
+    /* ===== التهيئة ===== */
+    async initData(){
+      if(!window.db) return;
+      try{
+        const [setDoc, unitsSnap] = await Promise.all([
+          db.collection("settings").doc("main").get(),
+          db.collection("units").get()
+        ]);
+        if(!setDoc.exists){ await db.collection("settings").doc("main").set(DEFAULT_SETTINGS); Object.assign(SETTINGS, DEFAULT_SETTINGS); }
+        else { Object.assign(SETTINGS, setDoc.data()); }
+
+        if(unitsSnap.empty){
+          for(const u of DEFAULT_UNITS) await db.collection("units").doc(u.id).set(u);
+          UNITS.splice(0, UNITS.length, ...JSON.parse(JSON.stringify(DEFAULT_UNITS)));
+        } else {
+          const fetched = [];
+          unitsSnap.forEach(d => fetched.push(d.data()));
+          fetched.sort((a,b)=>String(a.id).localeCompare(String(b.id)));
+          UNITS.splice(0, UNITS.length, ...fetched);
         }
+      }catch(e){ console.error("Firebase fetch error:", e.code, e.message, e); }
+    },
+    _initAuth(){
+      return new Promise(resolve => {
+        if(!window.auth){ this._applyPrefs(); return resolve(); }
+        let done = false;
+        const finish = () => { if(!done){ done=true; try{this._applyPrefs();}catch(e){} resolve(); } };
+        auth.onAuthStateChanged(async (user) => {
+          if(user){
+            await this._loadPrefs(user.uid);
+            try{ this._applyPrefs(); }catch(e){} // أعد التطبيق دائماً حتى لو انتهى المهلة الزمنية مسبقاً
+            finish();
+          }
+          else { try{ await auth.signInAnonymously(); }catch(e){ finish(); } }
+        });
+        // أمان: لا نعلّق الصفحة إلى الأبد إن تعذّرت المصادنة
+        setTimeout(finish, 4000);
+      });
+    },
+    async _loadPrefs(uid){
+      try{
+        const ref = db.collection("users").doc(uid);
+        const d = await ref.get();
+        if(d.exists){
+          const data = d.data();
+          _prefs.lang = data.lang || "ar";
+          _prefs.theme = data.theme || null;
+          _prefs.favorites = Array.isArray(data.favorites) ? data.favorites : [];
+        } else {
+          await ref.set({ lang:"ar", theme:null, favorites:[], createdAt:new Date().toISOString() });
+        }
+      }catch(e){ console.warn("prefs load failed", e); }
+    },
+    async initFirebaseData(){
+      // المصادقة أولاً ثم جلب/زرع البيانات
+      await this._initAuth();
+      await this.initData();
     },
 
+    /* ===== الإعدادات ===== */
     getSettings(){ return Object.assign({}, SETTINGS); },
-    async setSettings(s){ 
-        Object.assign(SETTINGS, s); 
-        if(window.db) await db.collection("settings").doc("main").set(s);
+    async setSettings(s){
+      Object.assign(SETTINGS, s);
+      if(window.db) await db.collection("settings").doc("main").set(s);
     },
+
+    /* ===== الاستراحات ===== */
     getUnits(){ return JSON.parse(JSON.stringify(UNITS)); },
-    async setUnits(arr){ 
-        UNITS.splice(0, UNITS.length, ...JSON.parse(JSON.stringify(arr)));
-        if(!window.db) return;
-        const batch = db.batch();
-        arr.forEach(u => {
-            const ref = db.collection("units").doc(u.id);
-            batch.set(ref, u);
-        });
-        await batch.commit();
+    async setUnits(arr){
+      UNITS.splice(0, UNITS.length, ...JSON.parse(JSON.stringify(arr)));
+      if(!window.db) return;
+      const batch = db.batch();
+      arr.forEach(u => batch.set(db.collection("units").doc(u.id), u));
+      await batch.commit();
     },
-    
+
+    /* ===== الحجوزات ===== */
     async getBookings(){
-        if(!window.db) return [];
+      if(!window.db) return [];
+      try{
         const snap = await db.collection("bookings").get();
         const bks = [];
         snap.forEach(d => { const data = d.data(); data.id = d.id; bks.push(data); });
+        bks.sort((a,b)=> String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
         return bks;
+      }catch(e){ console.error("getBookings failed", e); return []; }
     },
     async addBooking(b){
-        if(!window.db) return;
-        b.createdAt = new Date().toISOString();
-        await db.collection("bookings").add(b);
+      if(!window.db) return;
+      b.createdAt = new Date().toISOString();
+      await db.collection("bookings").add(b);
     },
-    
-    async markBooked(unitId, iso){
-        const u = UNITS.find(x=>x.id===unitId);
-        if(u && !u.booked.includes(iso)){ 
-            u.booked.push(iso); 
-            if(window.db) await db.collection("units").doc(unitId).update({ booked: u.booked });
-        }
+    async deleteBooking(id){
+      if(!window.db) return;
+      await db.collection("bookings").doc(id).delete();
     },
-    
-    // Favorites still use localStorage (user-specific)
-    getFavorites(){ 
-        try { return JSON.parse(localStorage.getItem("marbella_favorites") || "[]"); }
-        catch(e){ return []; }
-    },
-    isFavorite(id){ return this.getFavorites().includes(id); },
-    toggleFavorite(id){
-        const f = this.getFavorites();
-        const i = f.indexOf(id);
-        if(i>=0) f.splice(i,1); else f.push(id);
-        localStorage.setItem("marbella_favorites", JSON.stringify(f));
-        // Update likes counter on Firestore
-        this.updateLikes(id, i < 0 ? 1 : -1);
-    },
-    async updateLikes(unitId, diff) {
-        if(!window.db) return;
-        const u = UNITS.find(x=>x.id===unitId);
-        if(u) {
-            u.likes = (u.likes || 0) + diff;
-            await db.collection("units").doc(unitId).update({ likes: u.likes });
-        }
-    },
-    
-    async getReviews(unitId){ 
-        if(!window.db) return [];
-        const snap = await db.collection("reviews").where("unitId", "==", unitId).get();
-        const rs = [];
-        snap.forEach(d => rs.push(d.data()));
-        return rs;
+
+    /* ===== التقييمات ===== */
+    async getReviews(unitId){
+      if(!window.db) return [];
+      const snap = await db.collection("reviews").where("unitId","==",unitId).get();
+      const rs = [];
+      snap.forEach(d => rs.push(d.data()));
+      return rs;
     },
     async addReview(unitId, review){
-        if(!window.db) return;
-        review.unitId = unitId;
-        review.createdAt = new Date().toISOString();
-        await db.collection("reviews").add(review);
+      if(!window.db) return;
+      review.unitId = unitId;
+      review.createdAt = new Date().toISOString();
+      await db.collection("reviews").add(review);
     },
-    async avgRating(unitId){
-        const rs = await this.getReviews(unitId);
-        if(!rs.length) return null;
-        return (rs.reduce((s,r)=>s+(+r.rating||0),0)/rs.length);
+
+    /* ===== إعادة التعيين الكامل (لوحة التحكم) ===== */
+    async resetAll(){
+      if(!window.db) return;
+      // الإعدادات والاستراحات (إعادة زرع الافتراضي)
+      await db.collection("settings").doc("main").set(DEFAULT_SETTINGS);
+      Object.assign(SETTINGS, DEFAULT_SETTINGS);
+      const unitBatch = db.batch();
+      DEFAULT_UNITS.forEach(u => unitBatch.set(db.collection("units").doc(u.id), JSON.parse(JSON.stringify(u))));
+      await unitBatch.commit();
+      UNITS.splice(0, UNITS.length, ...JSON.parse(JSON.stringify(DEFAULT_UNITS)));
+      // حذف الحجوزات على دفعات (حد 500 عملية لكل batch) — يُعاد رمي الخطأ ليُعالَج في الواجهة
+      let snap = await db.collection("bookings").limit(450).get();
+      while(!snap.empty){
+        const b = db.batch();
+        snap.forEach(d => b.delete(d.ref));
+        await b.commit();
+        snap = await db.collection("bookings").limit(450).get();
+      }
     }
   };
 }
