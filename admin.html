@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة التحكم | منتجعات سديم</title>
+  <title>لوحة التحكم | منتجعات ماربيلا</title>
   <meta name="robots" content="noindex,nofollow" />
   <meta name="theme-color" content="#0f1a20" />
   <link rel="icon" type="image/png" href="assets/images/logo.png" />
@@ -18,8 +18,8 @@
   <!-- شاشة الدخول -->
   <div id="login-view" class="login-wrap">
     <div class="login-card">
-      <img src="assets/images/logo.png" alt="شعار سديم" class="login-logo" width="60" height="60" />
-      <h1>لوحة تحكم سديم</h1>
+      <img src="assets/images/logo.png" alt="شعار ماربيلا" class="login-logo" width="60" height="60" />
+      <h1>لوحة تحكم ماربيلا</h1>
       <p>أدخل كلمة المرور للمتابعة</p>
       <div class="login-error" id="login-error" role="alert"></div>
       <div class="login-info" id="login-info" role="status" aria-live="polite"></div>
@@ -38,7 +38,7 @@
     <aside class="sidebar">
       <div class="sidebar-brand">
         <img src="assets/images/logo.png" alt="" width="38" height="38" />
-        <div><strong>سديم</strong><small>لوحة التحكم</small></div>
+        <div><strong>ماربيلا</strong><small>لوحة التحكم</small></div>
       </div>
       <nav>
         <div class="nav-item active" data-tab="dashboard"><i class="fa-solid fa-gauge" aria-hidden="true"></i> لوحة المعلومات</div>
@@ -122,9 +122,14 @@
               <div class="a-field"><label>المنطقة</label><input id="s-area" type="text" /></div>
             </div>
             <div class="a-row">
+              <div class="a-field"><label>البريد الإلكتروني</label><input id="s-email" type="email" /></div>
+              <div class="a-field"><label>رقم الحساب البنكي (عربون)</label><input id="s-bank" type="text" /></div>
+            </div>
+            <div class="a-row">
               <div class="a-field"><label>انستغرام</label><input id="s-ig" type="url" /></div>
               <div class="a-field"><label>تيك توك</label><input id="s-tk" type="url" /></div>
             </div>
+            <div class="a-field"><label>مسار اللوجو (Logo Path)</label><input id="s-logo" type="text" placeholder="assets/images/logo.png" /></div>
             <div class="a-field"><label>رسالة الترحيب</label><textarea id="s-intro" rows="2"></textarea></div>
             <button type="submit" class="a-btn"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> حفظ الإعدادات</button>
           </form>

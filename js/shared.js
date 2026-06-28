@@ -1,5 +1,5 @@
 /* ============================================================
-   منتجعات سديم — مشترك بين كل الصفحات
+   منتجعات ماربيلا — مشترك بين كل الصفحات
    ربط الإعدادات + شريط التنقل + قائمة الجوال + كشف الظهور + Lightbox + تبديل اللغة
    ============================================================ */
 
@@ -42,7 +42,7 @@ const DICT = {
     "stat-guests": "ضيف سعيد",
     "stat-service": "خدمة عملاء",
     "stat-privacy": "خصوصية تامة",
-    "why-eye": "لماذا سديم",
+    "why-eye": "لماذا ماربيلا",
     "why-title": "تجربة تستحقها",
     "why-1-t": "خصوصية تامة",
     "why-1-d": "استراحات مستقلة بالكامل بعيداً عن الزحام",
@@ -56,7 +56,13 @@ const DICT = {
     "test-title": "قصص نجاح حقيقية",
     "loc-eye": "الموقع",
     "loc-title": "في قلب",
-    "offer-ended": "انتهى العرض"
+    "offer-ended": "انتهى العرض",
+    "book-deposit": "تأكيد الحجز يتطلب دفع عربون بقيمة 500 درهم لحساب رقم:",
+    "pledge-deposit": "أتعهد بدفع تأمين مسترجع (يُسترد في حال عدم وجود تلف أو فقد أو كسر).",
+    "pledge-pool": "أتعهد بعدم استخدام أي مواد تغير لون المسبح (صابون، ألوان، إلخ).",
+    "directions-title": "طريقة الوصول",
+    "share-link": "نسخ الرابط",
+    "copied": "تم النسخ!" 
   },
   en: {
     "nav-about": "About Us",
@@ -96,7 +102,7 @@ const DICT = {
     "stat-guests": "Happy Guests",
     "stat-service": "Customer Service",
     "stat-privacy": "Total Privacy",
-    "why-eye": "Why Sadeem",
+    "why-eye": "Why Marbella",
     "why-title": "An Experience You Deserve",
     "why-1-t": "Total Privacy",
     "why-1-d": "Fully independent resorts away from the crowd",
@@ -110,11 +116,17 @@ const DICT = {
     "test-title": "Real Success Stories",
     "loc-eye": "Location",
     "loc-title": "In the Heart of",
-    "offer-ended": "Offer Ended"
+    "offer-ended": "Offer Ended",
+    "book-deposit": "Booking requires a 500 AED deposit to account:",
+    "pledge-deposit": "I pledge to pay a refundable deposit (refunded if no damage/loss occurs).",
+    "pledge-pool": "I pledge not to use any substances that change the pool water color (dyes, soap, etc).",
+    "directions-title": "Directions",
+    "share-link": "Copy Link",
+    "copied": "Copied!" 
   }
 };
 
-let currentLang = localStorage.getItem("sadeem_lang") || "ar";
+let currentLang = localStorage.getItem("marbella_lang") || "ar";
 
 function tr(key){
   return DICT[currentLang][key] || key;
@@ -122,7 +134,7 @@ function tr(key){
 
 function updateLanguage(lang) {
   currentLang = lang;
-  localStorage.setItem("sadeem_lang", lang);
+  localStorage.setItem("marbella_lang", lang);
   
   const html = document.documentElement;
   html.lang = lang;
@@ -172,6 +184,19 @@ function initShell(){
   set("heroBrand", brand);
   set("brandName", brand);
   set("footerBrand", brand);
+  
+  const logoEl = $("main-logo");
+  if(logoEl && SETTINGS.logoPath) logoEl.src = SETTINGS.logoPath;
+  
+  const emailEl = $("footer-email");
+  if(emailEl && SETTINGS.email) emailEl.textContent = SETTINGS.email;
+  
+  const bankEl = $("bank-account");
+  if(bankEl && SETTINGS.bankAccount) bankEl.textContent = SETTINGS.bankAccount;
+  
+  const dirEl = $("directions-text");
+  if(dirEl) dirEl.textContent = isEn ? SETTINGS.directionsEn : SETTINGS.directions;
+  
   
   set("areaName", area);
   set("areaName2", area);
@@ -228,7 +253,7 @@ function initShell(){
       const html = document.documentElement;
       html.classList.toggle("theme-dark");
       const dark = html.classList.contains("theme-dark");
-      try{ localStorage.setItem("sadeem_theme", dark?"dark":"light"); }catch(e){}
+      try{ localStorage.setItem("marbella_theme", dark?"dark":"light"); }catch(e){}
       tToggle.querySelector("i").className = dark ? "fa-solid fa-sun" : "fa-solid fa-moon";
     });
   }

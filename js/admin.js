@@ -267,6 +267,9 @@ function renderSettings(){
   document.getElementById("s-ig").value=s.instagram||"";
   document.getElementById("s-tk").value=s.tiktok||"";
   document.getElementById("s-intro").value=s.introMessage||"";
+  if(document.getElementById("s-email")) document.getElementById("s-email").value=s.email||"";
+  if(document.getElementById("s-bank")) document.getElementById("s-bank").value=s.bankAccount||"";
+  if(document.getElementById("s-logo")) document.getElementById("s-logo").value=s.logoPath||"";
 }
 document.getElementById("settings-form").addEventListener("submit",e=>{
   e.preventDefault();
@@ -278,6 +281,9 @@ document.getElementById("settings-form").addEventListener("submit",e=>{
   s.instagram=document.getElementById("s-ig").value.trim();
   s.tiktok=document.getElementById("s-tk").value.trim();
   s.introMessage=document.getElementById("s-intro").value.trim();
+  if(document.getElementById("s-email")) s.email=document.getElementById("s-email").value.trim();
+  if(document.getElementById("s-bank")) s.bankAccount=document.getElementById("s-bank").value.trim();
+  if(document.getElementById("s-logo")) s.logoPath=document.getElementById("s-logo").value.trim();
   store.setSettings(s);toast("تم حفظ الإعدادات");
 });
 document.getElementById("pass-form").addEventListener("submit",async e=>{
@@ -307,3 +313,13 @@ function renderAll(){
 }
 // استئناف الجلسة إن كانت قائمة وصحيحة
 verifySession().then(ok => { if(ok){ sessionOk = true; showAdmin(); } });
+
+// Force migration from Sadeem to Marbella for existing local storage
+(function(){
+  const s = store.getSettings();
+  if(s.brandName === "منتجعات سديم" || s.brandName === "منتجعات سديم") {
+      s.brandName = "منتجعات ماربيلا";
+      s.brandNameEn = "Marbella Resorts";
+      store.setSettings(s);
+  }
+})();

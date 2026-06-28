@@ -691,3 +691,71 @@ html[dir="rtl"] .navbar-inner .nav-links {
   margin-right: auto;
   margin-left: 0;
 }
+
+/* New Features Styling */
+.booking-notice {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  padding: 0.8rem;
+  border-radius: var(--r-sm);
+  margin-bottom: 1rem;
+  color: var(--on-surface);
+  font-size: 0.9rem;
+}
+.booking-notice i { color: #ffc107; margin-inline-end: 0.3rem; }
+
+.pledges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  background: var(--surface);
+  padding: 1rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+}
+.pledge-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--on-surface);
+}
+.pledge-label input {
+  margin-top: 0.2rem;
+  accent-color: var(--primary);
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.directions-box {
+  background: var(--surface);
+  padding: 1rem;
+  border-radius: var(--r-sm);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--on-surface);
+}
+
+.btn-share {
+  background: var(--surface);
+  color: var(--on-surface);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--r-pill);
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+.btn-share:hover {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}

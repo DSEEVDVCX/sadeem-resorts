@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفاصيل الاستراحة | منتجعات ماربيلا</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .unit-page { padding: 4rem 1rem; }
+    .unit-header { text-align: center; margin-bottom: 2rem; }
+    .unit-images { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .unit-images img { width: 100%; height: 250px; object-fit: cover; border-radius: var(--r-md); cursor: pointer; transition: transform 0.3s; }
+    .unit-images img:hover { transform: scale(1.02); }
+    .unit-info { background: var(--surface); padding: 2rem; border-radius: var(--r-md); border: 1px solid var(--border); }
+    .unit-features { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; margin-bottom: 2rem; }
+    .unit-features span { background: rgba(var(--primary-rgb), 0.1); color: var(--primary); padding: 0.4rem 0.8rem; border-radius: var(--r-pill); font-size: 0.9rem; }
+    .book-action { text-align: center; margin-top: 2rem; }
+    .back-btn { display: inline-block; margin-bottom: 2rem; color: var(--muted); text-decoration: none; font-size: 0.9rem; }
+    .back-btn:hover { color: var(--primary); }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <span class="topbar-area"><i class="fa-solid fa-location-dot"></i> <span id="areaName"></span></span>
+      <div class="social">
+        <a id="link-whatsapp" href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a class="brand" href="index.html">
+        <img src="assets/images/logo.png" alt="Logo" class="logo" id="main-logo" width="52">
+        <span class="brand-text"><h1 id="brandName">منتجعات ماربيلا</h1><small>تفاصيل الاستراحة</small></span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container unit-page" id="unit-container">
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-right"></i> العودة للرئيسية</a>
+    <div id="unit-content">
+      <!-- Injected by JS -->
+      <div style="text-align:center; padding: 3rem;"><i class="fa-solid fa-spinner fa-spin fa-2x"></i> جاري التحميل...</div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <h3 id="footerBrand">منتجعات ماربيلا</h3>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/shared.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      initShell();
+      
+      const params = new URLSearchParams(window.location.search);
+      const id = parseInt(params.get("id"));
+      const unit = UNITS.find(u => u.id === id);
+      const container = document.getElementById("unit-content");
+      const isEn = typeof currentLang !== 'undefined' && currentLang === "en";
+
+      if (!unit) {
+        container.innerHTML = `<div class="empty-state"><h3>الاستراحة غير موجودة</h3><a href="index.html" class="btn btn-primary">العودة للرئيسية</a></div>`;
+        return;
+      }
+
+      document.title = (isEn && unit.nameEn ? unit.nameEn : unit.name) + " | " + (isEn ? SETTINGS.brandNameEn : SETTINGS.brandName);
+
+      const imagesHtml = unit.images.map(img => `<img src="${img}" alt="${unit.name}" onclick="window.open('${img}', '_blank')">`).join("");
+      
+      const featuresHtml = unit.features.map(f => {
+          let label = f;
+          if(isEn && unit.featuresEn){
+              const idx = unit.features.indexOf(f);
+              if(unit.featuresEn[idx]) label = unit.featuresEn[idx];
+          }
+          return `<span><i class="fa-solid fa-check"></i> ${label}</span>`;
+      }).join("");
+
+      const name = isEn && unit.nameEn ? unit.nameEn : unit.name;
+      const desc = isEn && unit.descEn ? unit.descEn : unit.desc;
+      const currency = isEn ? "AED" : "درهم";
+
+      container.innerHTML = `
+        <div class="unit-header">
+          <h2>${name}</h2>
+          <p class="muted" style="font-size:1.2rem; margin-top:0.5rem; color:var(--primary); font-weight:bold;">
+            ${unit.price} ${currency} / ${isEn ? 'Night' : 'الليلة'}
+          </p>
+        </div>
+        
+        <div class="unit-images">
+          ${imagesHtml}
+        </div>
+        
+        <div class="unit-info">
+          <h3>${isEn ? 'Details & Features' : 'التفاصيل والمرافق'}</h3>
+          <p style="line-height: 1.8; margin-top: 1rem; color: var(--muted);">${desc}</p>
+          
+          <div class="unit-features">
+            ${featuresHtml}
+          </div>
+          
+          <div class="book-action">
+            <a href="index.html#units-section" class="btn btn-primary btn-lg" style="padding: 1rem 3rem; font-size:1.1rem;">
+              <i class="fa-regular fa-calendar-check"></i> ${isEn ? 'Book Now from Homepage' : 'احجز الآن من الصفحة الرئيسية'}
+            </a>
+          </div>
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>
