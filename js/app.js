@@ -158,7 +158,7 @@ function renderUnits(filterFn){
         <div class="unit-actions">
           <a class="btn-outline" href="unit-details.html?id=${u.id}"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> ${tr("unit-details")}</a>
           <a class="btn-outline" href="https://www.google.com/maps?q=${u.lat},${u.lng}&z=15" target="_blank" rel="noopener"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${tr("unit-location")}</a>
-          <a class="btn-outline pdf-btn" href="${u.pdfLink || '#'}" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i> ${tr("btn-pdf")}</a>
+
           <button class="btn btn-wa btn-book" data-book="${u.id}" style="grid-column: 1/-1;"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> ${tr("btn-book")}</button>
         </div>
       </div>
