@@ -489,10 +489,15 @@ function openBooking(unitId){
 }
 
 function updateBookingSub(){
-  const price = getStayPrice(currentUnit);
-  const lbl = getStayLabel();
-  document.getElementById("modal-sub").textContent =
-    `${price} ${currentUnit.currency} — ${lbl} — ${currentUnit.tagline}`;
+  const night = currentUnit.price;
+  const day = currentUnit.dayPrice || currentUnit.price;
+  const cur = currentUnit.currency;
+  const sub = document.getElementById("modal-sub");
+  if(day !== night){
+    sub.innerHTML = `🌙 مبيت: <strong>${night} ${esc(cur)}</strong> &nbsp;|&nbsp; ☀️ نهاري: <strong>${day} ${esc(cur)}</strong>`;
+  } else {
+    sub.textContent = `${night} ${cur} — ${currentUnit.tagline}`;
+  }
 }
 
 /* ===== ملء قيم العربون/التأمين/التعهد من الإعدادات ===== */

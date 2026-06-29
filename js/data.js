@@ -186,6 +186,27 @@ if(!window.MarbellaStore){
   const _prefs = { lang:null, theme:null, favorites:[] };
   let _unitsSubscribed = false;
 
+  // تفعيل الاشتراك اللحظي على الاستراحات فور توفر قاعدة البيانات
+  function _subscribeUnits(){
+    if(_unitsSubscribed || !window.db) return;
+    _unitsSubscribed = true;
+    db.collection("units").onSnapshot(snap => {
+      const updated = [];
+      snap.forEach(d => {
+        const data = d.data();
+        const def = DEFAULT_UNITS.find(u => u.id === data.id);
+        updated.push(def ? mergeUnit(def, data) : data);
+      });
+      updated.sort((a,b)=>String(a.id).localeCompare(String(b.id)));
+      UNITS.splice(0, UNITS.length, ...updated);
+      // أعد تطبيق الإعدادات (قد تتغير الأسعار) وأبلغ الصفحة بإعادة العرض
+      window.dispatchEvent(new Event("unitsUpdated"));
+    }, err => console.warn("units snapshot error", err));
+  }
+  // فعّل الاشتراك بمجرد تحميل firebase-config.js (db متاح)
+  if(window.db){ _subscribeUnits(); }
+  else { window.addEventListener("firebaseReady", _subscribeUnits, { once:true }); }
+
   window.MarbellaStore = {
     AR_MONTHS, AR_DOW, pad, toISO,
 
@@ -266,24 +287,8 @@ if(!window.MarbellaStore){
           UNITS.splice(0, UNITS.length, ...fetched);
         }
 
-        // اشتراك لحظي: حدّث UNITS محلياً عند أي تغيير من لوحة التحكم
-        if(!_unitsSubscribed){
-          _unitsSubscribed = true;
-          db.collection("units").onSnapshot(snap => {
-            const updated = [];
-            snap.forEach(d => {
-              const data = d.data();
-              const def = DEFAULT_UNITS.find(u => u.id === data.id);
-              updated.push(def ? mergeUnit(def, data) : data);
-            });
-            updated.sort((a,b)=>String(a.id).localeCompare(String(b.id)));
-            // حدّث فقط إن تغيّرت البيانات فعلاً (تفادي إعادة عرض لا داعي لها)
-            if(JSON.stringify(updated) !== JSON.stringify(UNITS)){
-              UNITS.splice(0, UNITS.length, ...updated);
-              window.dispatchEvent(new Event("unitsUpdated"));
-            }
-          }, err => console.warn("units snapshot error", err));
-        }
+        // فعّل الاشتراك اللحظي إن لم يُفعَّل بعد
+        _subscribeUnits();
       }catch(e){ console.error("Firebase fetch error:", e.code, e.message, e); }
     },
     _initAuth(){

@@ -889,6 +889,17 @@ html[dir="rtl"] .navbar-inner .nav-links {
 .unit-prices .price-day{background:var(--brass);color:var(--night)}
 .unit-prices small{font-weight:500;font-size:.65rem;opacity:.85}
 
+/* سعرين في بطاقة تفاصيل الاستراحة */
+.bc-prices{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.8rem}
+.bc-prices .bc-price-night,
+.bc-prices .bc-price-day{
+  display:flex;align-items:baseline;gap:.3rem;font-weight:700;font-size:1.1rem;
+  padding:.5rem .8rem;border-radius:8px
+}
+.bc-prices .bc-price-night{background:var(--night-78,rgba(21,36,43,.78));color:#fff}
+.bc-prices .bc-price-day{background:var(--brass,#C29A3E);color:var(--night,#15242b)}
+.bc-prices small{font-weight:500;font-size:.7rem;opacity:.85}
+
 @media (max-width: 480px) {
   .stay-options { grid-template-columns: 1fr; }
   .stay-opt { padding: 0.7rem; }

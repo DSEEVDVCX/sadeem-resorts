@@ -24,6 +24,14 @@ bootstrapPage(async () => {
     </a>`).join("");
 
   const mainImgSrc = (unit.images && unit.images.length) ? unit.images[0] : '';
+  const nightPrice = unit.price;
+  const dayPrice = unit.dayPrice || unit.price;
+  const pricesHTML = (nightPrice !== dayPrice)
+    ? `<div class="bc-prices">
+         <span class="bc-price-night">🌙 ${esc(nightPrice)} ${esc(unit.currency)} <small>/${isEn?"Night":"الليلة"}</small></span>
+         <span class="bc-price-day">☀️ ${esc(dayPrice)} ${esc(unit.currency)} <small>/${isEn?"Day":"نهاري"}</small></span>
+       </div>`
+    : `<div class="bc-price">${esc(nightPrice)} <small>${esc(unit.currency)} / ${isEn?"Night":"الليلة"}</small></div>`;
   $("detail-content").innerHTML=`
     <div class="detail-grid">
       <div class="detail-main">
@@ -48,8 +56,8 @@ bootstrapPage(async () => {
       </div>
       <aside class="detail-side reveal" data-delay="1">
         <div class="booking-card">
-          <div class="bc-price">${unit.price} <small>${unit.currency} / ${isEn?"Night":"الليلة"}</small></div>
-          <button class="btn btn-wa btn-full" id="book-this"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> ${isEn?"Book this resort":"احجز هذه الاستراحة"}</button>
+          ${pricesHTML}
+          <button class="btn btn-wa btn-full" id="book-this"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> ${isEn?"Book via WhatsApp":"احجز عبر واتساب"}</button>
           <a class="btn btn-outline btn-full" href="https://www.google.com/maps?q=${unit.lat},${unit.lng}&z=15" target="_blank" rel="noopener"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${isEn?"Directions":"الاتجاهات"}</a>
         </div>
         <div class="reviews-card" id="reviews-card">
@@ -85,9 +93,15 @@ bootstrapPage(async () => {
   });
   mainImg.style.cursor="zoom-in";
 
-  // زر الحجز يوجّه للصفحة الرئيسية مع تمرير للاستراحة
+  // زر الحجز: فتح واتساب مباشرة برسالة جاهزة (بدون توجيه لصفحة أخرى)
   $("book-this").addEventListener("click",()=>{
-    location.href=`index.html?book=${unit.id}#units-section`;
+    const wa = SETTINGS.whatsapp || "";
+    let msg = `${SETTINGS.introMessage || ""}\n\n`;
+    msg += `🏡 الاستراحة: ${unit.name}\n`;
+    msg += `🌙 مبيت: ${nightPrice} ${unit.currency}\n`;
+    if(dayPrice !== nightPrice) msg += `☀️ نهاري: ${dayPrice} ${unit.currency}\n`;
+    msg += `\nأرغب بالحجز، الرجاء إرسال التاريخ المتاح. شكراً.`;
+    window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, "_blank");
   });
 
   // ===== نظام التقييمات =====
