@@ -108,7 +108,7 @@ bootstrapPage(() => {
               <input id="rev-name" type="text" placeholder="${isEn ? "Your name" : "اسمك"}" autocomplete="name" />
               <textarea id="rev-text" rows="2" placeholder="${isEn ? "Write your comment..." : "اكتب تعليقك..."}"></textarea>
               <small class="rf-error" id="rf-error" role="alert"></small>
-              <button type="submit" class="a-btn" style="background:var(--brass);color:var(--night)"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> ${isEn ? "Submit" : "إرسال التقييم"}</button>
+              <button type="submit" class="a-btn"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> ${isEn ? "Submit" : "إرسال التقييم"}</button>
             </form>
           </div>
         </aside>
