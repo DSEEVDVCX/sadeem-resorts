@@ -2,7 +2,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDmh9KrXI7WPzywuopF55gUjMyOvZejMkI",
   authDomain: "marbella-resorts.firebaseapp.com",
   projectId: "marbella-resorts",
-  storageBucket: "marbella-resorts.firebasestorage.app",
+  // ملاحظة: storageBucket غير مطلوب — رفع الصور يتم عبر ImgBB وليس Firebase Storage.
   messagingSenderId: "891120028271",
   appId: "1:891120028271:web:11b584600bf2c260705b9a"
 };
@@ -20,7 +20,6 @@ if (!firebase.apps.length) {
 }
 window.db = firebase.firestore();
 window.auth = firebase.auth();
-window.storage = firebase.storage();
 
 // تفعيل التخزين المؤقت المحلي (offline persistence) لتفادي إعادة جلب الإعدادات/الاستراحات
 // مع كل تنقّل بين الصفحات. نستخدم الوضع أحادي التبويب (الوحيد غير المُهمَل في compat SDK)؛

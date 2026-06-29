@@ -333,36 +333,46 @@ if(!window.MarbellaStore){
       await db.collection("reviews").doc(id).delete();
     },
 
-    /* ===== رفع/حذف صور الاستراحات (Firebase Storage) ===== */
-    // رفع ملف إلى units/{unitId}/{timestamp}-{filename} وإرجاع رابط التنزيل
-    uploadImage(file, unitId, onProgress){
-      return new Promise((resolve, reject)=>{
-        if(!window.storage){ reject(new Error("Storage غير مُهيّأ")); return; }
-        if(!file){ reject(new Error("لم يُحدّد ملف")); return; }
-        const safeName = (file.name||"image").replace(/[^\w.\-]+/g,"_");
-        const path = `units/${unitId}/${Date.now()}-${safeName}`;
-        const ref = storage.ref(path);
-        const task = ref.put(file, { contentType: file.type || "image/*" });
-        if(typeof onProgress === "function"){
-          task.on("state_changed",
-            snap => {
-              const pct = snap.totalBytes ? Math.round((snap.bytesTransferred/snap.totalBytes)*100) : 0;
-              onProgress(pct);
-            },
-            reject
-          );
-        }
-        task.then(() => ref.getDownloadURL())
-            .then(url => resolve({ url, path }))
-            .catch(reject);
+    /* ===== رفع/حذف صور الاستراحات (عبر ImgBB — مجاني تماماً) =====
+       ملاحظة: مفتاح ImgBB يُقرأ من SETTINGS.imgbbKey (يُضبط من لوحة التحكم).
+       ImgBB لا يدعم الحذف عبر الـAPI المجاني، لذا deleteImage تكتفي
+       بإزالة الرابط من بيانات الاستراحة (لا يُحذف الملف من الخادم). */
+    async uploadImage(file, unitId, onProgress){
+      if(!file) throw new Error("لم يُحدّد ملف");
+      const key = SETTINGS.imgbbKey;
+      if(!key){
+        throw new Error("IMGBB_NO_KEY");
+      }
+      // تحويل الملف إلى Base64 (متطلب واجهة ImgBB)
+      const base64 = await new Promise((resolve, reject)=>{
+        const r = new FileReader();
+        r.onload = () => resolve(r.result.split(",")[1]); // إزالة بادئة data:image/...;base64,
+        r.onerror = () => reject(new Error("تعذّر قراءة الملف"));
+        r.readAsDataURL(file);
       });
+      // محاكاة تقدّم بسيط (fetch لا يدعم تقدّم الرفع)
+      if(typeof onProgress === "function"){ onProgress(50); }
+      const fd = new FormData();
+      fd.append("image", base64);
+      fd.append("name", (file.name||"image").replace(/[^\w.\-]+/g,"_"));
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${encodeURIComponent(key)}`, {
+        method: "POST", body: fd
+      });
+      if(!res.ok){
+        const t = await res.text().catch(()=>"");
+        throw new Error("تعذّر الرفع إلى ImgBB (" + res.status + (t?("): "+t):")"));
+      }
+      const data = await res.json();
+      if(!data || !data.success || !data.data || !data.data.url){
+        throw new Error("استجابة ImgBB غير متوقعة");
+      }
+      if(typeof onProgress === "function"){ onProgress(100); }
+      // نُرجع الرابط المعروض و(اختيارياً رابط الحذف إن وفّرته الاستجابة)
+      return { url: data.data.url, deleteUrl: data.data.delete_url || null };
     },
+    // ImgBB لا يدعم الحذف المجاني عبر API — نكتفي بإزالة الرابط من الواجهة
     async deleteImage(url){
-      if(!window.storage || !url) return;
-      try{
-        // refFromURL يدعم روابط التنزيل القياسية لـ Firebase Storage
-        await storage.refFromURL(url).delete();
-      }catch(e){ console.warn("deleteImage failed", e); }
+      console.info("deleteImage: تُزال الإشارة من بيانات الاستراحة فقط (ImgBB لا يحذف عبر API المجاني).", url);
     },
 
     /* ===== إعادة التعيين الكامل (لوحة التحكم) ===== */

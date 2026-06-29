@@ -245,8 +245,8 @@ function editUnit(id){
     if(!confirm("حذف هذه الصورة من الاستراحة؟")) return;
     u.images.splice(idx,1);
     await store.setUnits(units);            // حدّث Firestore أولاً
-    await store.deleteImage(removedUrl);   // ثم احذف الملف من Storage
-    toast("تم حذف الصورة");
+    await store.deleteImage(removedUrl);   // يزيل الإشارة فقط (ImgBB لا يحذف عبر API المجاني)
+    toast("تم حذف الصورة من المعرض");
     // أعد فتح النافذة لتعكس الحالة الجديدة
     wrap.remove(); editUnit(id);
   });
@@ -268,7 +268,10 @@ function editUnit(id){
     }catch(e){
       console.error(e);
       progressEl.textContent = "";
-      toast("تعذّر رفع الصورة — تحقّق من قواعد Storage", true);
+      const msg = (e && e.message === "IMGBB_NO_KEY")
+        ? "أضِف مفتاح ImgBB من الإعدادات أولاً"
+        : "تعذّر رفع الصورة — تحقّق من مفتاح ImgBB والاتصال";
+      toast(msg, true);
     }
   });
 
@@ -343,6 +346,7 @@ function renderSettings(){
   if(document.getElementById("s-email")) document.getElementById("s-email").value=s.email||"";
   if(document.getElementById("s-bank")) document.getElementById("s-bank").value=s.bankAccount||"";
   if(document.getElementById("s-logo")) document.getElementById("s-logo").value=s.logoPath||"";
+  if(document.getElementById("s-imgbb")) document.getElementById("s-imgbb").value=s.imgbbKey||"";
 }
 document.getElementById("settings-form").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -357,6 +361,7 @@ document.getElementById("settings-form").addEventListener("submit",async e=>{
   if(document.getElementById("s-email")) s.email=document.getElementById("s-email").value.trim();
   if(document.getElementById("s-bank")) s.bankAccount=document.getElementById("s-bank").value.trim();
   if(document.getElementById("s-logo")) s.logoPath=document.getElementById("s-logo").value.trim();
+  if(document.getElementById("s-imgbb")) s.imgbbKey=document.getElementById("s-imgbb").value.trim();
   await store.setSettings(s);toast("تم حفظ الإعدادات");
 });
 document.getElementById("pass-form").addEventListener("submit",async e=>{
