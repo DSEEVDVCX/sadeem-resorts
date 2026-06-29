@@ -40,5 +40,10 @@
     .then(function () { return load(cdn + "auth-compat.js"); })
     .then(function () { return load("js/firebase-config.js" + V); })
     .then(function () { window.dispatchEvent(new Event("firebaseReady")); })
-    .catch(function (error) { console.warn("Firebase async load failed", error); });
+    .catch(function (error) {
+      console.warn("Firebase async load failed", error);
+      // أبلغ نافذة الانتظار (app-loader.js) بإخفاء نفسها فوراً وإظهار البيانات
+      // الافتراضية بدل تعليق المستخدم حتى انتهاء المهلة الاحتياطية.
+      window.dispatchEvent(new Event("firebaseLoadFailed"));
+    });
 })();
