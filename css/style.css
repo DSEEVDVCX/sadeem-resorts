@@ -878,6 +878,17 @@ html[dir="rtl"] .navbar-inner .nav-links {
 .pledge-card.invalid { border-color: #c0392b; box-shadow: 0 0 0 3px rgba(192,57,43,0.12); }
 .pledge-card.invalid .pledge-check-box { border-color: #c0392b; }
 
+/* عرض سعرين (مبيت/نهاري) في بطاقة الاستراحة */
+.unit-prices{display:flex;flex-direction:column;gap:.1rem}
+.unit-prices .price-night,
+.unit-prices .price-day{
+  background:var(--night-78);color:#fff;padding:.25rem .7rem;border-radius:6px;
+  font-weight:700;font-size:.85rem;backdrop-filter:blur(4px);
+  display:flex;align-items:baseline;gap:.25rem
+}
+.unit-prices .price-day{background:var(--brass);color:var(--night)}
+.unit-prices small{font-weight:500;font-size:.65rem;opacity:.85}
+
 @media (max-width: 480px) {
   .stay-options { grid-template-columns: 1fr; }
   .stay-opt { padding: 0.7rem; }

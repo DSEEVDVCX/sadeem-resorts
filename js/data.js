@@ -184,6 +184,7 @@ function toISO(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getD
 
 if(!window.MarbellaStore){
   const _prefs = { lang:null, theme:null, favorites:[] };
+  let _unitsSubscribed = false;
 
   window.MarbellaStore = {
     AR_MONTHS, AR_DOW, pad, toISO,
@@ -263,6 +264,25 @@ if(!window.MarbellaStore){
           });
           fetched.sort((a,b)=>String(a.id).localeCompare(String(b.id)));
           UNITS.splice(0, UNITS.length, ...fetched);
+        }
+
+        // اشتراك لحظي: حدّث UNITS محلياً عند أي تغيير من لوحة التحكم
+        if(!_unitsSubscribed){
+          _unitsSubscribed = true;
+          db.collection("units").onSnapshot(snap => {
+            const updated = [];
+            snap.forEach(d => {
+              const data = d.data();
+              const def = DEFAULT_UNITS.find(u => u.id === data.id);
+              updated.push(def ? mergeUnit(def, data) : data);
+            });
+            updated.sort((a,b)=>String(a.id).localeCompare(String(b.id)));
+            // حدّث فقط إن تغيّرت البيانات فعلاً (تفادي إعادة عرض لا داعي لها)
+            if(JSON.stringify(updated) !== JSON.stringify(UNITS)){
+              UNITS.splice(0, UNITS.length, ...updated);
+              window.dispatchEvent(new Event("unitsUpdated"));
+            }
+          }, err => console.warn("units snapshot error", err));
         }
       }catch(e){ console.error("Firebase fetch error:", e.code, e.message, e); }
     },

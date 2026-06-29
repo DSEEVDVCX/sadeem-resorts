@@ -206,8 +206,8 @@ function editUnit(id){
     <div class="a-field"><label>الاسم</label><input id="e-name" value="${esc(u.name)}"/></div>
     <div class="a-field"><label>الوصف</label><input id="e-tag" value="${esc(u.tagline)}"/></div>
     <div class="a-row">
-      <div class="a-field"><label>سعر المبيت</label><input id="e-price" type="number" value="${u.price}"/></div>
-      <div class="a-field"><label>سعر النهاري</label><input id="e-dayprice" type="number" value="${u.dayPrice||""}" placeholder="افتراضي 60%"/></div>
+      <div class="a-field"><label>سعر المبيت (درهم)</label><input id="e-price" type="number" min="0" value="${u.price}"/></div>
+      <div class="a-field"><label>سعر النهاري (درهم)</label><input id="e-dayprice" type="number" min="0" value="${u.dayPrice||u.price}" placeholder="مثال: 800"/></div>
     </div>
     <div class="a-field"><label>العملة</label><input id="e-curr" value="${esc(u.currency)}"/></div>
     <div class="a-field"><label>السعة</label><input id="e-cap" value="${esc(u.capacity)}"/></div>
@@ -284,7 +284,7 @@ function editUnit(id){
     u.tagline=wrap.querySelector("#e-tag").value.trim();
     u.price=+wrap.querySelector("#e-price").value||u.price;
     const dpVal = wrap.querySelector("#e-dayprice").value.trim();
-    u.dayPrice = dpVal ? +dpVal : null;   // null = استخدم الافتراضي (60%) في الموقع
+    u.dayPrice = dpVal ? +dpVal : u.price;   // افتراضياً يساوي سعر المبيت إن لم يُحدّد
     u.currency=wrap.querySelector("#e-curr").value.trim()||u.currency;
     u.capacity=wrap.querySelector("#e-cap").value.trim();
     u.beds=wrap.querySelector("#e-beds").value.trim();
