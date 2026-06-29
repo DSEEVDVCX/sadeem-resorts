@@ -151,19 +151,37 @@ document.querySelectorAll(".nav-item").forEach(item=>{
 function renderDashboard(){
   const bookings=Array.isArray(cachedBookings) ? cachedBookings : [];
   const units=store.getUnits();
-  const totalRev=bookings.reduce((s,b)=>s+bookingPrice(b),0);
+
+  const confirmedKeys=new Set();
+  const perUnit={};
+  let totalBookings=0, totalRev=0;
+  units.forEach(u=>{
+    perUnit[u.id]=0;
+    (u.booked||[]).forEach(iso=>{
+      confirmedKeys.add(u.id+"|"+iso);
+      totalBookings++; totalRev+=(+u.price||0); perUnit[u.id]++;
+    });
+  });
+  bookings.forEach(b=>{
+    const key=(b.unitId||"")+"|"+(b.date||"");
+    if(confirmedKeys.has(key)) return;
+    totalBookings++; totalRev+=bookingPrice(b);
+    const uid=(b.unitId && perUnit[b.unitId]!=null)?b.unitId:(units.find(u=>u.name===b.unitName)||{}).id;
+    if(uid && perUnit[uid]!=null) perUnit[uid]++;
+  });
+
   const now=new Date();now.setHours(0,0,0,0);
   const in30=new Date(now);in30.setDate(in30.getDate()+30);
-  const occCount = units.reduce((s,u)=>s+u.booked.filter(iso=>{const d=new Date(iso);return d>=now&&d<in30;}).length,0);
-  const occPct = Math.min(100, Math.round(occCount/(units.length*30)*100));
+  const occCount = units.reduce((s,u)=>s+(u.booked||[]).filter(iso=>{const d=new Date(iso);return d>=now&&d<in30;}).length,0);
+  const occPct = units.length ? Math.min(100, Math.round(occCount/(units.length*30)*100)) : 0;
 
   document.getElementById("dash-stats").innerHTML=`
-    <div class="stat-card"><div class="sc-top"><span class="sc-label">إجمالي الحجوزات</span><span class="sc-icon"><i class="fa-solid fa-receipt"></i></span></div><div class="sc-val">${bookings.length}</div></div>
+    <div class="stat-card"><div class="sc-top"><span class="sc-label">إجمالي الحجوزات</span><span class="sc-icon"><i class="fa-solid fa-receipt"></i></span></div><div class="sc-val">${totalBookings}</div></div>
     <div class="stat-card"><div class="sc-top"><span class="sc-label">الإيرادات المتوقعة</span><span class="sc-icon"><i class="fa-solid fa-coins"></i></span></div><div class="sc-val">${totalRev.toLocaleString("ar")} <small>درهم</small></div></div>
     <div class="stat-card"><div class="sc-top"><span class="sc-label">الإشغال (30 يوم)</span><span class="sc-icon"><i class="fa-solid fa-chart-line"></i></span></div><div class="sc-val">${occPct}%</div><div class="sc-trend">${units.length} استراحات</div></div>
     <div class="stat-card"><div class="sc-top"><span class="sc-label">استراحات نشطة</span><span class="sc-icon"><i class="fa-solid fa-house"></i></span></div><div class="sc-val">${units.length}</div></div>`;
 
-  const counts = units.map(u=>({name:u.name, n:bookings.filter(b=>b.unitId===u.id || b.unitName===u.name).length}));
+  const counts = units.map(u=>({name:u.name, n:perUnit[u.id]||0}));
   const max = Math.max(1,...counts.map(c=>c.n));
   const chartCard=document.querySelector(".chart-card");
   chartCard.querySelector(".chart-x")?.remove();
@@ -218,7 +236,7 @@ function renderAdminCalendar(){
       const i=unit.booked.indexOf(iso);
       if(i>=0){unit.booked.splice(i,1);toast("تم إلغاء تحديد اليوم كمحجوز");}
       else{unit.booked.push(iso);toast("تم تحديد اليوم كمحجوز");}
-      await store.setUnits(units);renderAdminCalendar();
+      await store.setUnits(units);renderDashboard();renderAdminCalendar();
     });
   });
 }

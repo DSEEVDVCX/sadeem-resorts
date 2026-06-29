@@ -310,26 +310,40 @@ function initCountdown(){
 }
 
 /* ===== عرض قصص النجاح ===== */
-function renderTestimonials(){
+async function renderTestimonials(){
   const wrap = document.getElementById("testimonials-grid");
-  if(!wrap || typeof TESTIMONIALS === "undefined") return;
+  if(!wrap) return;
   const isEn = currentLang === "en";
-  wrap.innerHTML = TESTIMONIALS.map(t=>{
-    const stars = "★".repeat(t.rating) + "☆".repeat(5-t.rating);
+
+  // جرّب التقييمات الحقيقية من Firebase أولاً
+  let real = [];
+  if(window.db && window.MarbellaStore){
+    try{ real = await window.MarbellaStore.getAllReviews(); }catch(e){ real = []; }
+  }
+  real.sort((a,b)=> String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
+
+  const card = t => {
+    const stars = "★".repeat(t.rating||0) + "☆".repeat(5-(t.rating||0));
     const name = isEn ? (t.nameEn || t.name) : t.name;
-    const role = isEn ? (t.roleEn || t.role) : t.role;
+    const role = isEn ? (t.roleEn || t.role) : (t.role || (t.unitName || "ضيف"));
     const text = isEn ? (t.textEn || t.text) : t.text;
     return `
     <figure class="testimonial-card reveal">
-      <div class="t-stars" aria-label="${t.rating} من 5">${stars}</div>
-      <blockquote>"${text}"</blockquote>
+      <div class="t-stars" aria-label="${t.rating||0} من 5">${stars}</div>
+      <blockquote>"${esc(text)}"</blockquote>
       <figcaption>
-        <span class="t-avatar">${name.charAt(0)}</span>
-        <span><strong>${name}</strong><small>${role}</small></span>
+        <span class="t-avatar">${esc(name.charAt(0))}</span>
+        <span><strong>${esc(name)}</strong><small>${esc(role)}</small></span>
       </figcaption>
     </figure>`;
-  }).join("");
+  };
+
+  const hasReal = real.length > 0;
+  const list = hasReal ? real : (typeof TESTIMONIALS !== "undefined" ? TESTIMONIALS : []);
+  wrap.innerHTML = list.map(card).join("");
+  if(typeof window.applyRevealEffects === "function") window.applyRevealEffects(wrap);
 }
+
 
 function switchImg(u,img,dir){
   const gal = img.closest(".unit-gallery");
