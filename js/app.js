@@ -526,11 +526,7 @@ function applyPledgeSettings(){
   const depEl = document.getElementById("pledge-deposit-amt");
   if(depEl) depEl.textContent = deposit + " درهم";
 
-  const insurance = settingNumber(s.insuranceAmount, 0);
-  const insEl = document.getElementById("pledge-insurance-amt");
-  if(insEl) insEl.textContent = insurance > 0 ? (insurance + " درهم") : "تأمين مسترجع";
-
-  const pledgeText = s.pledgeText || "أتعهد بعدم تغيير لون مياه المسبح أو إفسادها، وأوافق على دفع العربون والتأمين. أُقرّ بصحة المعلومات أعلاه.";
+  const pledgeText = s.pledgeText || "أتعهد بعدم تغيير لون مياه المسبح أو إفسادها، وأوافق على دفع العربون. أُقرّ بصحة المعلومات أعلاه.";
   const ptEl = document.getElementById("pledge-text");
   if(ptEl) ptEl.textContent = pledgeText;
 }
@@ -576,10 +572,9 @@ async function sendToWhatsApp(){
   msg += `🕒 نوع الحجز: ${stayLabel}\n`;
   msg += `💵 السعر: ${price} ${currentUnit.currency}\n`;
   msg += `👤 الاسم: ${name}\n`;
-  msg += `📱 الجوال: ${phone}\n`;
+  msg += `📱 الموبايل: ${phone}\n`;
   if(notes) msg += `📝 ملاحظات: ${notes}\n`;
-  const insuranceText = insurance > 0 ? `وتأمين ${insurance} درهم` : "وتأمين مسترجع";
-  msg += `\n✅ تعهدت بدفع عربون ${deposit} درهم ${insuranceText}، وألا أُغيّر لون مياه المسبح.\n`;
+  msg += `\n✅ تعهدت بدفع عربون ${deposit} درهم، وألا أُغيّر لون مياه المسبح.\n`;
   msg += `رجو تأكيد الحجز، شكراً لكم.`;
 
   const url = `https://wa.me/${SETTINGS.whatsapp}?text=${encodeURIComponent(msg)}`;

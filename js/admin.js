@@ -426,7 +426,6 @@ function renderSettings(){
   if(document.getElementById("s-bank")) document.getElementById("s-bank").value=s.bankAccount||"";
   if(document.getElementById("s-imgbb")) document.getElementById("s-imgbb").value=s.imgbbKey||"";
   if(document.getElementById("s-deposit")) document.getElementById("s-deposit").value=s.depositAmount||"";
-  if(document.getElementById("s-insurance")) document.getElementById("s-insurance").value=s.insuranceAmount||"";
   if(document.getElementById("s-pledge")) document.getElementById("s-pledge").value=s.pledgeText||"";
   renderLogoPicker(s.logoPath || "assets/images/logo.png");
   applyAdminLogo(s.logoPath);
@@ -470,11 +469,7 @@ document.getElementById("settings-form").addEventListener("submit",async e=>{
     const num = Number(val);
     s.depositAmount = val === "" ? 500 : (Number.isFinite(num) ? num : (s.depositAmount || 500));
   }
-  if(document.getElementById("s-insurance")){
-    const val = document.getElementById("s-insurance").value.trim();
-    const num = Number(val);
-    s.insuranceAmount = val === "" ? 0 : (Number.isFinite(num) ? num : (s.insuranceAmount || 0));
-  }
+
   if(document.getElementById("s-pledge")) s.pledgeText=document.getElementById("s-pledge").value.trim();
   await store.setSettings(s);toast("تم حفظ الإعدادات");
 });
