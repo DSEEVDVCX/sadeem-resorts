@@ -93,15 +93,9 @@ bootstrapPage(async () => {
   });
   mainImg.style.cursor="zoom-in";
 
-  // زر الحجز: فتح واتساب مباشرة برسالة جاهزة (بدون توجيه لصفحة أخرى)
+  // زر الحجز: يوجّه للصفحة الرئيسية لفتح نافذة الحجز (التقويم) للاستراحة المحددة
   $("book-this").addEventListener("click",()=>{
-    const wa = SETTINGS.whatsapp || "";
-    let msg = `${SETTINGS.introMessage || ""}\n\n`;
-    msg += `🏡 الاستراحة: ${unit.name}\n`;
-    msg += `🌙 مبيت: ${nightPrice} ${unit.currency}\n`;
-    if(dayPrice !== nightPrice) msg += `☀️ نهاري: ${dayPrice} ${unit.currency}\n`;
-    msg += `\nأرغب بالحجز، الرجاء إرسال التاريخ المتاح. شكراً.`;
-    window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, "_blank");
+    location.href=`index.html?book=${encodeURIComponent(unit.id)}#units-section`;
   });
 
   // ===== نظام التقييمات =====
