@@ -240,16 +240,7 @@ function initShell(){
     }));
   }
 
-  const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
-  const reveals = document.querySelectorAll(".reveal");
-  if(reduce || !("IntersectionObserver" in window)){
-    reveals.forEach(e => e.classList.add("in"));
-  } else {
-    const io = new IntersectionObserver(es => es.forEach(e => {
-      if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
-    }), {threshold:.15, rootMargin:"0px 0px -40px 0px"});
-    reveals.forEach(e => io.observe(e));
-  }
+  applyRevealEffects();
 
   const tToggle = $("theme-toggle");
   if(tToggle){
@@ -272,6 +263,21 @@ function initShell(){
   // Initial lang setup
   updateLanguage(currentLang);
 }
+
+function applyRevealEffects(root){
+  const scope = root || document;
+  const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const reveals = scope.querySelectorAll(".reveal:not(.in)");
+  if(reduce || !("IntersectionObserver" in window)){
+    reveals.forEach(e => e.classList.add("in"));
+  } else {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+    }), {threshold:.15, rootMargin:"0px 0px -40px 0px"});
+    reveals.forEach(e => io.observe(e));
+  }
+}
+window.applyRevealEffects = applyRevealEffects;
 
 /* ===== Lightbox ===== */
 let _lbState = {imgs:[], idx:0, lastFocus:null};

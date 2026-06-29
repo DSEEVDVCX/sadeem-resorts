@@ -74,6 +74,8 @@ bootstrapPage(async () => {
     </section>`;
 
   // تبديل الصورة الرئيسية + Lightbox المشترك
+  if(typeof window.applyRevealEffects === "function") window.applyRevealEffects($("detail-content"));
+
   const mainImg=$("dg-main-img");
   document.querySelectorAll(".dg-thumb img").forEach(th=>{
     th.addEventListener("click",()=>{ mainImg.src=th.src; mainImg.dataset.idx=th.dataset.idx; });
