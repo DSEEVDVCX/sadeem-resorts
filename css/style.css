@@ -113,7 +113,7 @@
   --on-night-invert:#e3e8e4;
   --ink-05:rgba(227,232,228,.05);
   --ink-12:rgba(227,232,228,.10);
-  --surface:var(--night-2);
+  --surface:var(--sand-2);
   --border:var(--line);
   --on-surface:var(--ink);
   --on-primary:var(--sand);
