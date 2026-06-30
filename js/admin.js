@@ -531,14 +531,15 @@ document.getElementById("offer-form").addEventListener("submit",async e=>{
     label: document.getElementById("o-label").value.trim(),
     labelEn: document.getElementById("o-labelen").value.trim(),
     start: document.getElementById("o-start").value,
-    target: document.getElementById("o-target").value
+    target: document.getElementById("o-target").value,
+    updatedAt: Date.now()
   };
   await store.setSettings(s);
   toast(s.offer.active ? "تم تفعيل العرض وحفظه" : "تم حفظ العرض (غير مُفعّل)");
 });
 document.getElementById("o-disable").addEventListener("click", async ()=>{
   const s=store.getSettings();
-  s.offer = Object.assign({}, s.offer||{}, { active:false });
+  s.offer = Object.assign({}, s.offer||{}, { active:false, updatedAt: Date.now() });
   await store.setSettings(s);
   renderOffers();
   toast("تم إيقاف العرض");

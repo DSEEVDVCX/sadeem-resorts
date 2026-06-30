@@ -246,14 +246,28 @@ if(!window.MarbellaStore){
   }
 
   // اشتراك لحظي على الإعدادات (العروض، الأسعار، التواصل...) — ينعكس فوراً على كل الصفحات
+  // حماية ضد cache القديم: نتجاهل الكتابات المحلية المعلّقة ونتحقق أن القيمة فعلاً تغيّرت
   let _settingsSubscribed = false;
+  let _lastSettingsKey = "";
   function _subscribeSettings(){
     if(_settingsSubscribed || !window.db) return;
     _settingsSubscribed = true;
-    db.collection("settings").doc("main").onSnapshot(doc => {
+    db.collection("settings").doc("main").onSnapshot({includeMetadataChanges:false}, doc => {
       if(!doc.exists) return;
-      Object.assign(SETTINGS, mergeSettings(DEFAULT_SETTINGS, doc.data()));
-      // أبلغ الصفحات: الإعدادات تغيّرت (العرض، الأسعار، رقم الواتساب...)
+      // تجاهل الكتابات المحلية المعلّقة (cache قبل تأكيد الخادم) — تسبب عودة القيم القديمة
+      if(doc.metadata && doc.metadata.hasPendingWrites) return;
+      const merged = mergeSettings(DEFAULT_SETTINGS, doc.data());
+      // احمِ offer المحلي الأحدث (الذي عدّله المستخدم للتو) من cache قديم
+      if(merged.offer && SETTINGS.offer && merged.offer.updatedAt && SETTINGS.offer.updatedAt){
+        if(merged.offer.updatedAt < SETTINGS.offer.updatedAt){
+          merged.offer = SETTINGS.offer;
+        }
+      }
+      // لا تطلق الحدث إلا إذا تغيّر شيء فعلاً (يمنع الإطلاقات الزائدة والحلقات)
+      const key = JSON.stringify({offer: merged.offer});
+      if(key === _lastSettingsKey){ Object.assign(SETTINGS, merged); return; }
+      _lastSettingsKey = key;
+      Object.assign(SETTINGS, merged);
       window.dispatchEvent(new Event("settingsUpdated"));
     }, err => console.warn("settings snapshot error", err));
   }
@@ -387,8 +401,10 @@ if(!window.MarbellaStore){
     getSettings(){ return Object.assign({}, SETTINGS); },
     async setSettings(s){
       Object.assign(SETTINGS, s);
+      // أبلغ الصفحات فوراً محلياً (onSnapshot قد يتأخر أو يُتجاهل بسبب hasPendingWrites)
+      _lastSettingsKey = JSON.stringify({offer: SETTINGS.offer});
+      window.dispatchEvent(new Event("settingsUpdated"));
       if(window.db) await db.collection("settings").doc("main").set(s);
-      // onSnapshot على settings/main سيُطلق settingsUpdated تلقائياً بعد الكتابة
     },
 
     /* ===== الاستراحات ===== */
