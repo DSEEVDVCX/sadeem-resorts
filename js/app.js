@@ -279,13 +279,25 @@ function renderFavorites(){
 /* ===== عدّاد العروض التنازلي ===== */
 function initCountdown(){
   const banner = document.getElementById("offer-banner");
-  if(!banner || typeof OFFERS === "undefined" || !OFFERS.target) return;
-  const target = new Date(OFFERS.target + "T23:59:59");
+  if(!banner) return;
+  // اقرأ العرض من SETTINGS.offer (مصدر موحّد يُدار من لوحة التحكم)
+  const off = SETTINGS.offer || OFFERS;
+  if(!off || !off.target || !off.active){ banner.hidden = true; return; }
+  banner.hidden = false;
+  const isEn = currentLang === "en";
+  const label = isEn ? (off.labelEn || off.label) : off.label;
+  const target = new Date(off.target + "T23:59:59");
+  const start = off.start ? new Date(off.start + "T00:00:00") : null;
   function tick(){
     const now = new Date();
+    // إن لم يبدأ العرض بعد
+    if(start && now < start){
+      banner.innerHTML = `<div class="ob-label"><i class="fa-solid fa-fire" aria-hidden="true"></i> ${label}</div>`;
+      return;
+    }
     let diff = Math.max(0, target - now);
     if(diff <= 0){
-      banner.innerHTML = `<div class="ob-label"><i class="fa-solid fa-fire" aria-hidden="true"></i> ${OFFERS.label} — انتهى العرض</div>`;
+      banner.innerHTML = `<div class="ob-label"><i class="fa-solid fa-fire" aria-hidden="true"></i> ${label} — ${tr("offer-ended")}</div>`;
       clearInterval(timer);
       return;
     }
@@ -294,12 +306,12 @@ function initCountdown(){
     const mins = Math.floor(diff / 60000); diff %= 60000;
     const secs = Math.floor(diff / 1000);
     banner.innerHTML = `
-      <div class="ob-label"><i class="fa-solid fa-fire" aria-hidden="true"></i> ${OFFERS.label}</div>
+      <div class="ob-label"><i class="fa-solid fa-fire" aria-hidden="true"></i> ${label}</div>
       <div class="countdown" aria-live="off">
-        <div class="cd-unit"><strong>${days}</strong><small>يوم</small></div>
-        <div class="cd-unit"><strong>${pad(hrs)}</strong><small>ساعة</small></div>
-        <div class="cd-unit"><strong>${pad(mins)}</strong><small>دقيقة</small></div>
-        <div class="cd-unit"><strong>${pad(secs)}</strong><small>ثانية</small></div>
+        <div class="cd-unit"><strong>${days}</strong><small>${isEn?"Days":"يوم"}</small></div>
+        <div class="cd-unit"><strong>${pad(hrs)}</strong><small>${isEn?"Hrs":"ساعة"}</small></div>
+        <div class="cd-unit"><strong>${pad(mins)}</strong><small>${isEn?"Min":"دقيقة"}</small></div>
+        <div class="cd-unit"><strong>${pad(secs)}</strong><small>${isEn?"Sec":"ثانية"}</small></div>
       </div>`;
   }
   tick();

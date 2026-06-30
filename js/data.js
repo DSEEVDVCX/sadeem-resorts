@@ -16,6 +16,14 @@ const SETTINGS = {
   areaNameEn: "Al Dhahirah / Al Malaleeh - Abu Dhabi",
   // رسالة ترحيب تظهر في الطلب المُرسل للواتساب
   introMessage: "مرحباً، أرغب في حجز استراحة:",
+  // العرض الترويجي (يُدار من لوحة التحكم ويُحفظ في Firestore)
+  offer: {
+    active: true,
+    label: "عرض الصيف — خصم خاص على الحجوزات المبكرة",
+    labelEn: "Summer Offer — Special Discount on Early Bookings",
+    start: "",          // تاريخ بدء العرض (YYYY-MM-DD) — فارغ = فوري
+    target: "2026-07-15" // تاريخ انتهاء العرض (YYYY-MM-DD)
+  }
 };
 
 /* ============================================================
@@ -104,14 +112,10 @@ const UNITS = [
 ];
 
 /* ============================================================
-   العروض (للعدّاد التنازلي في الصفحة الرئيسية)
-   ضع تاريخ انتهاء العرض بصيغة YYYY-MM-DD
+   العروض — مُدمج الآن في SETTINGS.offer وقابل للإدارة من لوحة التحكم.
+   يُحتفظ بهذا المرجع للتوافق مع الكود القديم فقط.
    ============================================================ */
-const OFFERS = {
-  target: "2026-07-15",
-  label: "عرض الصيف — خصم خاص على الحجوزات المبكرة",
-  labelEn: "Summer Offer — Special Discount on Early Bookings"
-};
+const OFFERS = SETTINGS.offer;
 
 const TESTIMONIALS = [
   { name: "أبو محمد", nameEn: "Abu Mohammed", role: "ضيف دائم", roleEn: "Regular Guest", text: "استراحة نظيفة وخصوصية تامة، كرّرنا الحجز مرتين والخدمة ممتازة.", textEn: "Clean resort, total privacy. We booked twice, excellent service.", rating: 5 },
@@ -160,7 +164,7 @@ function mergeUnit(def, data){
   }
   return base;
 }
-// مثل mergeUnit لكن للإعدادات (كائن مسطّح)
+// مثل mergeUnit لكن للإعدادات (يدعم الدمج العميق للكائنات المتداخلة كـ offer)
 function mergeSettings(def, data){
   const base = Object.assign({}, def);
   if(!data || typeof data !== "object") return base;
@@ -169,6 +173,10 @@ function mergeSettings(def, data){
     if(v === null || v === undefined) continue;
     if(Array.isArray(v)){ if(v.length > 0) base[k] = v; continue; }
     if(typeof v === "string"){ if(v.trim() !== "") base[k] = v; continue; }
+    if(typeof v === "object" && typeof base[k] === "object" && !Array.isArray(base[k])){
+      base[k] = Object.assign({}, base[k], v);   // دمج عميق لكائن واحد
+      continue;
+    }
     base[k] = v;
   }
   return base;

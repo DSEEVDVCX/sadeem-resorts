@@ -460,6 +460,23 @@ function renderSettings(){
   if(document.getElementById("s-pledge")) document.getElementById("s-pledge").value=s.pledgeText||"";
   renderLogoPicker(s.logoPath || "assets/images/logo.png");
   applyAdminLogo(s.logoPath);
+  renderOffers();
+}
+
+/* ===== إدارة العروض ===== */
+function renderOffers(){
+  const s = store.getSettings();
+  const off = s.offer || {};
+  const cb = document.getElementById("o-active");
+  if(cb) cb.checked = !!off.active;
+  const lbl = document.getElementById("o-label");
+  if(lbl) lbl.value = off.label || "";
+  const lblEn = document.getElementById("o-labelen");
+  if(lblEn) lblEn.value = off.labelEn || "";
+  const st = document.getElementById("o-start");
+  if(st) st.value = off.start || "";
+  const tg = document.getElementById("o-target");
+  if(tg) tg.value = off.target || "";
 }
 function renderLogoPicker(selectedPath){
   const wrap = document.getElementById("logo-picker");
@@ -503,6 +520,28 @@ document.getElementById("settings-form").addEventListener("submit",async e=>{
 
   if(document.getElementById("s-pledge")) s.pledgeText=document.getElementById("s-pledge").value.trim();
   await store.setSettings(s);toast("تم حفظ الإعدادات");
+});
+
+/* ===== حفظ العرض الترويجي ===== */
+document.getElementById("offer-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const s=store.getSettings();
+  s.offer = {
+    active: document.getElementById("o-active").checked,
+    label: document.getElementById("o-label").value.trim(),
+    labelEn: document.getElementById("o-labelen").value.trim(),
+    start: document.getElementById("o-start").value,
+    target: document.getElementById("o-target").value
+  };
+  await store.setSettings(s);
+  toast(s.offer.active ? "تم تفعيل العرض وحفظه" : "تم حفظ العرض (غير مُفعّل)");
+});
+document.getElementById("o-disable").addEventListener("click", async ()=>{
+  const s=store.getSettings();
+  s.offer = Object.assign({}, s.offer||{}, { active:false });
+  await store.setSettings(s);
+  renderOffers();
+  toast("تم إيقاف العرض");
 });
 document.getElementById("pass-form").addEventListener("submit",async e=>{
   e.preventDefault();

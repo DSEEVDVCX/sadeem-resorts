@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-  <link rel="stylesheet" href="css/admin.css?v=10" />
+  <link rel="stylesheet" href="css/admin.css?v=11" />
 </head>
 <body>
 
@@ -46,6 +46,7 @@
         <div class="nav-item" data-tab="units"><i class="fa-solid fa-house" aria-hidden="true"></i> الاستراحات</div>
         <div class="nav-item" data-tab="bookings"><i class="fa-solid fa-receipt" aria-hidden="true"></i> سجل الحجوزات</div>
         <div class="nav-item" data-tab="reviews"><i class="fa-solid fa-star" aria-hidden="true"></i> التقييمات</div>
+        <div class="nav-item" data-tab="offers"><i class="fa-solid fa-fire" aria-hidden="true"></i> العروض</div>
         <div class="nav-item" data-tab="settings"><i class="fa-solid fa-gear" aria-hidden="true"></i> الإعدادات</div>
       </nav>
       <div class="sidebar-foot">إصدار 2.0 — Firebase</div>
@@ -120,6 +121,32 @@
         </div>
       </section>
 
+      <!-- ===== العروض ===== -->
+      <section class="section" id="sec-offers">
+        <div class="panel" style="max-width:640px">
+          <div class="panel-head"><h3>إدارة العروض الترويجية</h3></div>
+          <p style="color:var(--a-muted);font-size:.82rem;margin-bottom:1.2rem">تحكّم في عرض العرض الترويجي على الصفحة الرئيسية. فعّل أو أوقف العرض، وحدّد نصه وتواريخه.</p>
+          <form id="offer-form">
+            <div class="a-field">
+              <label style="display:flex;align-items:center;gap:.6rem;cursor:pointer">
+                <input type="checkbox" id="o-active" style="width:1.3rem;height:1.3rem;accent-color:var(--a-brass)" />
+                <span>تفعيل العرض (يظهر العداد التنازلي في الصفحة الرئيسية)</span>
+              </label>
+            </div>
+            <div class="a-field"><label>نص العرض (عربي)</label><input id="o-label" type="text" placeholder="مثال: عرض الصيف — خصم خاص على الحجوزات المبكرة" /></div>
+            <div class="a-field"><label>نص العرض (إنجليزي)</label><input id="o-labelen" type="text" placeholder="Summer Offer — Special Discount..." /></div>
+            <div class="a-row">
+              <div class="a-field"><label>تاريخ بدء العرض (اختياري)</label><input id="o-start" type="date" /><small style="color:var(--a-muted);font-size:.72rem">اتركه فارغاً للبدء فوراً</small></div>
+              <div class="a-field"><label>تاريخ انتهاء العرض</label><input id="o-target" type="date" /></div>
+            </div>
+            <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+              <button type="submit" class="a-btn"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> حفظ العرض</button>
+              <button type="button" class="a-btn danger" id="o-disable"><i class="fa-solid fa-ban" aria-hidden="true"></i> إيقاف العرض</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
       <!-- ===== الإعدادات ===== -->
       <section class="section" id="sec-settings">
         <div class="panel" style="max-width:640px">
@@ -182,7 +209,7 @@
   </div>
 
   <!-- Firebase (مُركَّز عبر firebase-loader.js) -->
-  <script src="js/firebase-loader.js?v=18"></script>
-  <script src="js/admin.js?v=17"></script>
+  <script src="js/firebase-loader.js?v=19"></script>
+  <script src="js/admin.js?v=18"></script>
 </body>
 </html>
