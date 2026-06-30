@@ -372,10 +372,15 @@ if(!window.MarbellaStore){
     getUnits(){ return JSON.parse(JSON.stringify(UNITS)); },
     async setUnits(arr){
       UNITS.splice(0, UNITS.length, ...JSON.parse(JSON.stringify(arr)));
+      // أبلغ الصفحات المفتوحة بإعادة العرض فوراً (لا ننتظر onSnapshot الذي قد
+      // يطلق أولاً من cache محلي قديم ويمحو التحديث المحلي مؤقتاً)
+      window.dispatchEvent(new Event("unitsUpdated"));
       if(!window.db) return;
       const batch = db.batch();
       arr.forEach(u => batch.set(db.collection("units").doc(u.id), u));
       await batch.commit();
+      // أعد الإبلاغ بعد تأكيد الكتابة في الخادم
+      window.dispatchEvent(new Event("unitsUpdated"));
     },
 
     /* ===== الحجوزات ===== */

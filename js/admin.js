@@ -286,10 +286,13 @@ function editUnit(id){
     <div class="a-field"><label>العملة</label><input id="e-curr" value="${esc(u.currency)}"/></div>
     <div class="a-field"><label>السعة</label><input id="e-cap" value="${esc(u.capacity)}"/></div>
     <div class="a-row">
-      <div class="a-field"><label>الغرف</label><input id="e-beds" value="${esc(u.beds)}"/></div>
-      <div class="a-field"><label>دورات المياه</label><input id="e-baths" value="${esc(u.baths)}"/></div>
+      <div class="a-field"><label>عدد الغرف</label><input id="e-rooms" type="number" min="0" value="${u.roomsNum||0}"/></div>
+      <div class="a-field"><label>عدد دورات المياه</label><input id="e-bathsnum" type="number" min="0" value="${u.bathsNum||0}"/></div>
     </div>
-    <div class="a-field"><label>المميزات (افصل بفاصلة)</label><textarea id="e-feat" rows="2">${esc(u.features.join("، "))}</textarea></div>
+    <div class="a-row">
+      <div class="a-field"><label>عدد المسابح</label><input id="e-pools" type="number" min="0" value="${u.poolsNum||1}"/></div>
+      <div class="a-field"><label>المميزات (افصل بفاصلة)</label><textarea id="e-feat" rows="2">${esc(u.features.join("، "))}</textarea></div>
+    </div>
 
     <div class="e-gallery">
       <label>صور الاستراحة</label>
@@ -365,8 +368,14 @@ function editUnit(id){
     u.weekendDayPrice = wdpVal ? +wdpVal : (u.weekendPrice || u.price);   // افتراضياً يساوي سعر مبيت الويكند
     u.currency=wrap.querySelector("#e-curr").value.trim()||u.currency;
     u.capacity=wrap.querySelector("#e-cap").value.trim();
-    u.beds=wrap.querySelector("#e-beds").value.trim();
-    u.baths=wrap.querySelector("#e-baths").value.trim();
+    u.roomsNum=+wrap.querySelector("#e-rooms").value||0;
+    u.bathsNum=+wrap.querySelector("#e-bathsnum").value||0;
+    u.poolsNum=+wrap.querySelector("#e-pools").value||1;
+    // ولّد النصوص العربية/الإنجليزية تلقائياً للتوافق مع صفحة التفاصيل (specs-table)
+    u.beds = u.roomsNum + " غرف نوم";
+    u.baths = u.bathsNum + " دورات مياه";
+    if(!u.bedsEn) u.bedsEn = u.roomsNum + " Bedrooms";
+    if(!u.bathsEn) u.bathsEn = u.bathsNum + " Bathrooms";
     u.features=wrap.querySelector("#e-feat").value.split(/[،,]/).map(s=>s.trim()).filter(Boolean);
     await store.setUnits(units);wrap.remove();renderAll();toast("تم حفظ التعديلات");
   });
