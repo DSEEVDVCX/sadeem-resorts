@@ -495,6 +495,7 @@ section[id],main[id]{scroll-margin-top:90px}
 
 /* ===== عدّاد العروض التنازلي ===== */
 .offer-banner{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;background:linear-gradient(135deg,var(--clay),#8a3a22);color:#fff;padding:.8rem 1.2rem;border-radius:var(--r-card);margin-bottom:1.2rem;text-align:center}
+.offer-banner[hidden]{display:none}
 .offer-banner .ob-label{font-weight:700;font-size:.95rem}
 .offer-banner .ob-label i{color:var(--brass-soft)}
 .countdown{display:flex;gap:.5rem}
